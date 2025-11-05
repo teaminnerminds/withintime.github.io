@@ -34,7 +34,7 @@
       background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #0b0710 100%);
       z-index: 2;
     }
-    #hero img { width: 45vmin; position: relative; z-index: 3; opacity: 0; transform: scale(0.85); animation: glitch-heavy 3s infinite steps(8); }
+    #hero img { width: 45vmin; position: relative; z-index: 3; opacity: 0; transform: scale(0.85); }
 
     section { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 3rem 1rem; position: relative; overflow: hidden; }
 
@@ -75,6 +75,11 @@
   50% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(110%); }
   100% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
 }
+/* Glitch burst effect */
+.glitch-burst { animation: glitch-heavy 0.4s steps(8) 1; }
+
+/* Hero particles */
+#hero-particles { position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -83,7 +88,7 @@
     <div id="loader-bar"></div>
   </div>
 
-  <section id="hero">
+  <section id="hero"><canvas id="hero-particles"></canvas>
     <img src="logotransp.png" id="hero-logo" alt="Within Time Logo" />
   </section>
 
@@ -173,5 +178,24 @@
       carousel.style.transform = `translateX(-${index * 100}%)`;
     });
   </script>
+<audio id="glitch-sfx" src="glitch.mp3" preload="auto"></audio>
+<script>
+const logo = document.getElementById('hero-logo');
+const glitchAudio = document.getElementById('glitch-sfx');
+setInterval(() => {
+  if (Math.random() < 0.18) {
+    logo.classList.add('glitch-burst');
+    if(glitchAudio) glitchAudio.play().catch(()=>{});
+    setTimeout(() => logo.classList.remove('glitch-burst'), 450);
+  }
+}, 1800);
+
+// Hero particle field
+const hcanvas = document.getElementById('hero-particles');
+const hctx = hcanvas.getContext('2d');
+let hw, hh, hparticles;
+function hresize(){ hw=hcanvas.width=window.innerWidth; hh=hcanvas.height=window.innerHeight; hparticles=Array.from({length:40},()=>({x:Math.random()*hw,y:Math.random()*hh,s:Math.random()*2+1,dx:(Math.random()-0.5)*0.2,dy:(Math.random()-0.5)*0.2,o:Math.random()*0.5+0.2})); }
+function hanim(){ hctx.clearRect(0,0,hw,hh); hparticles.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>hw)p.dx*=-1;if(p.y<0||p.y>hh)p.dy*=-1;hctx.beginPath();hctx.arc(p.x,p.y,p.s,0,Math.PI*2);hctx.fillStyle=`rgba(164,122,255,${p.o})`;hctx.fill();});requestAnimationFrame(hanim);}window.addEventListener('resize',hresize);hresize();hanim();
+</script>
 </body>
 </html>
