@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Within Time | Official Site</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Orbitron', sans-serif; background: #0c0c0c; color: #fff; overflow-x: hidden; }
+
+    /* Preloader */
+    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; }
+    #loader-bar { width: 0; height: 4px; background: #00fff6; transition: width 1s ease; }
+
+    /* Glitch intro */
+    .glitch-container { display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(180deg, #000, #111 70%, #222); position: relative; overflow: hidden; }
+    .logo { font-size: 3rem; text-transform: uppercase; color: #00fff6; position: relative; animation: glitch 1s infinite; }
+    @keyframes glitch {
+      0% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      20% { text-shadow: -2px 0 red, 2px 0 cyan; }
+      40% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      60% { text-shadow: -2px 0 red, 2px 0 cyan; }
+      80% { text-shadow: 2px 0 red, -2px 0 cyan; }
+      100% { text-shadow: none; }
+    }
+
+    section { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 3rem 1rem; }
+
+    .trailer-section { background: url('background-image.jpg') center/cover no-repeat; }
+    .trailer-section iframe { width: 80%; height: 60vh; border: 3px solid #00fff6; border-radius: 10px; }
+
+    .story, .features { opacity: 0; transform: translateY(50px); transition: opacity 1s ease, transform 1s ease; }
+    .visible { opacity: 1; transform: translateY(0); }
+
+    .features-list { display: flex; flex-direction: column; gap: 1.5rem; max-width: 700px; }
+
+    .characters { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .carousel { display: flex; overflow: hidden; width: 80%; position: relative; }
+    .character-card { min-width: 100%; transition: transform 0.6s ease; text-align: center; }
+    .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; }
+    .nav-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+    .nav-buttons button { background: #00fff6; color: #000; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold; border-radius: 6px; }
+
+    footer { padding: 2rem; text-align: center; background: #111; color: #777; }
+    footer a { color: #00fff6; margin: 0 0.5rem; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div id="preloader">
+    <p>Loading...</p>
+    <div id="loader-bar"></div>
+  </div>
+
+  <div class="glitch-container" id="hero">
+    <h1 class="logo">Within Time</h1>
+    <p>A journey beyond reality.</p>
+  </div>
+
+  <section class="trailer-section">
+    <h2>Watch the Trailer</h2>
+    <iframe src="https://www.youtube.com/embed/YOUR_TRAILER_ID" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <section class="story">
+    <h2>The Story</h2>
+    <p>Enter a fractured world where time itself is unstable. Discover the truth hidden between seconds.</p>
+  </section>
+
+  <section class="features">
+    <h2>Key Features</h2>
+    <div class="features-list">
+      <p>⚔️ Turn-based combat with tactical depth.</p>
+      <p>⏳ Manipulate time to change outcomes.</p>
+      <p>🌌 Explore surreal environments filled with mystery.</p>
+    </div>
+  </section>
+
+  <section class="characters">
+    <h2>Meet the Characters</h2>
+    <div class="carousel" id="carousel">
+      <div class="character-card">
+        <img src="character1.jpg" alt="Character 1">
+        <h3>Aris</h3>
+        <p>The time wanderer who lost her past.</p>
+      </div>
+      <div class="character-card">
+        <img src="character2.jpg" alt="Character 2">
+        <h3>Kael</h3>
+        <p>A knight bound by fate and guilt.</p>
+      </div>
+      <div class="character-card">
+        <img src="character3.jpg" alt="Character 3">
+        <h3>Nera</h3>
+        <p>A seer who watches time fracture.</p>
+      </div>
+    </div>
+    <div class="nav-buttons">
+      <button id="prev">Prev</button>
+      <button id="next">Next</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>Follow us:</p>
+    <a href="#">Steam</a> | <a href="#">Twitter</a> | <a href="#">YouTube</a> | <a href="#">Discord</a>
+    <p>&copy; 2025 Within Time Studios</p>
+  </footer>
+
+  <script>
+    // Preloader animation
+    window.addEventListener('load', () => {
+      const bar = document.getElementById('loader-bar');
+      bar.style.width = '100%';
+      setTimeout(() => document.getElementById('preloader').style.display = 'none', 1200);
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.story, .features').forEach(el => observer.observe(el));
+
+    // Character carousel
+    let index = 0;
+    const cards = document.querySelectorAll('.character-card');
+    document.getElementById('next').addEventListener('click', () => {
+      index = (index + 1) % cards.length;
+      document.getElementById('carousel').style.transform = `translateX(-${index * 100}%)`;
+    });
+    document.getElementById('prev').addEventListener('click', () => {
+      index = (index - 1 + cards.length) % cards.length;
+      document.getElementById('carousel').style.transform = `translateX(-${index * 100}%)`;
+    });
+  </script>
+</body>
+</html>
