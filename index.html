@@ -58,7 +58,46 @@
     .characters { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
     .carousel { display: flex; overflow: hidden; width: 80%; position: relative; }
     .character-card { min-width: 100%; transition: transform 0.6s ease; text-align: center; }
-    .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 20px #5a3b8d; }
+    .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 20px #5a3b8d; position: relative; z-index: 3; }
+
+/* Character Card Ambient Effects */
+.character-card { position: relative; overflow: visible; }
+
+/* Soft glow remains */
+.character-card::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(164,122,255,0.45) 0%, rgba(50,0,80,0.0) 70%);
+  filter: blur(40px);
+  z-index: 1;
+  animation: hero-glow 6s ease-in-out infinite alternate;
+}
+
+/* Crescent arc highlight (ACTIVE character only) */
+.character-card.active::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(12deg);
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 8px solid rgba(164,122,255,0.55);
+  border-color: rgba(164,122,255,0.65) transparent transparent transparent;
+  animation: crescent-pulse 4s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* Nebula drift stays */
+.character-card .nebula { display:none; }
+
+.character-card:hover img {
+  animation: small-glitch 0.45s steps(6) 1;
+} {
+  animation: small-glitch 0.45s steps(6) 1;
+}
     .nav-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
     .nav-buttons button { background: #a47aff; color: #000; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold; border-radius: 6px; transition: 0.3s; }
     .nav-buttons button:hover { background: #fff; color: #000; }
@@ -80,6 +119,26 @@
 
 /* Hero particles */
 #hero-particles { position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; }
+@keyframes hero-glow {
+  0% { opacity: 0.4; }
+  100% { opacity: 0.8; }
+}
+@keyframes nebula-sway {
+  0% { transform: translate(-4px, -4px) scale(1.02); }
+  100% { transform: translate(4px, 4px) scale(1.05); }
+}
+@keyframes small-glitch {
+  0% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
+  20% { filter: hue-rotate(40deg) contrast(140%); transform: translate(-3px,2px); }
+  40% { filter: hue-rotate(-40deg) contrast(160%); transform: translate(3px,-2px); }
+  60% { filter: hue-rotate(20deg) contrast(130%); transform: translate(-2px,1px); }
+  80% { filter: hue-rotate(-20deg) contrast(120%); transform: translate(2px,-1px); }
+  100% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
+}
+@keyframes crescent-pulse {
+  0% { opacity: 0.35; transform: translate(-50%, -50%) rotate(12deg) scale(1.0); }
+  100% { opacity: 0.8; transform: translate(-50%, -50%) rotate(12deg) scale(1.08); }
+}
 </style>
 </head>
 <body>
@@ -99,11 +158,25 @@
 
   <section class="reveal-right">
     <h2>The Story</h2>
-    <p>Enter a fractured world where time itself is unstable. Discover the truth hidden between seconds.</p>
+    <p>Six months remain before the fate of two worlds is sealed. Yunis Caelum</h3>
+        <p>A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies the quiet weight of expectations he cannot always carry.</p>
     <div class="story-gallery">
-      <img src="placeholder1.jpg">
-      <img src="placeholder2.jpg">
-      <img src="placeholder3.jpg">
+      <img src="groupdiscuss.png">
+      <img src="firsteterniatime.png">
+      <img src="gravesitepioc.jpg">
+    </div>
+  </section>
+
+  <section class="reveal">
+    <h2>Gameplay & Content</h2>
+    <img src="titlescreenonepen.png" alt="Gameplay Highlight" style="width:70%; border-radius:8px; margin-bottom:2rem; box-shadow:0 0 30px #4b2a7d;">
+    <div class="features-list">
+      <p>🎮 <strong>13 Unique Playable Characters</strong> — Each with their own story, arc, and combat identity.</p>
+      <p>⏳ <strong>Exclusive STANCE Combat System</strong> — A strategic twist on turn-based battles.</p>
+      <p>🌍 <strong>Explore 9 Unique Regions</strong> — Traverse both Terrus and Iolade across 50+ hours of adventure.</p>
+      <p>🎙️ <strong>Fully Voiced Cutscenes & Encounters</strong> — Bringing emotional story moments to life.</p>
+      <p>🎼 <strong>200+ Track OST by Oxiqa</strong> — A soundscape that defines the emotional core of Within Time.</p>
+      <p>🏆 <strong>100+ Achievements</strong> — For explorers, strategists, and completionists.</p>
     </div>
   </section>
 
@@ -117,22 +190,27 @@
   </section>
 
   <section class="characters reveal-right">
-    <h2>Meet the Characters</h2>
+    <h2>The Scions of Fate</h2>
     <div class="carousel" id="carousel">
       <div class="character-card">
-        <img src="character1.jpg" alt="Character 1">
-        <h3>Aris</h3>
-        <p>The time wanderer who lost her past.</p>
+        <img src="yunissilouhette.png" alt="Yunis">
+        <h3>Yunis Caelum</h3>
+        <p>The steady leader who carries the weight of fate.</p>
       </div>
       <div class="character-card">
-        <img src="character2.jpg" alt="Character 2">
-        <h3>Kael</h3>
-        <p>A knight bound by fate and guilt.</p>
+        <img src="estellasilouhette.png" alt="Estella">
+        <h3>Estella Kisiel</h3>
+        <p>The brilliant strategist of the group. Her insight cuts through uncertainty, and her history with Yunis runs deep — built on years of shared childhood and unspoken understanding.</p>
       </div>
       <div class="character-card">
-        <img src="character3.jpg" alt="Character 3">
-        <h3>Nera</h3>
-        <p>A seer who watches time fracture.</p>
+        <img src="angiesilouhette.png" alt="Angie">
+        <h3>Angie Alfaro</h3>
+        <p>Warm, optimistic, and fiercely capable. A master of firearms with sharp instincts, Angie holds the emotional center of the group, lifting others when the weight of fate grows too heavy.</p>
+      </div>
+      <div class="character-card">
+        <img src="rictorsilouhette.png" alt="Rictor">
+        <h3>Rictor Fitzsimmons</h3>
+        <p>A powerhouse shaped by hardship — once a fighter on the streets, now a guardian to his friends. Strong in body, warm in heart, and always ready to crack a joke to break the tension.</p>
       </div>
     </div>
     <div class="nav-buttons">
@@ -169,13 +247,18 @@
     let index = 0;
     const cards = document.querySelectorAll('.character-card');
     const carousel = document.getElementById('carousel');
+
+function updateActiveCard() {
+  cards.forEach((c,i)=> c.classList.toggle('active', i === index));
+}
+updateActiveCard();
     document.getElementById('next').addEventListener('click', () => {
       index = (index + 1) % cards.length;
-      carousel.style.transform = `translateX(-${index * 100}%)`;
+      carousel.style.transform = `translateX(-${index * 100}%)`; updateActiveCard() = `translateX(-${index * 100}%)`;
     });
     document.getElementById('prev').addEventListener('click', () => {
       index = (index - 1 + cards.length) % cards.length;
-      carousel.style.transform = `translateX(-${index * 100}%)`;
+      carousel.style.transform = `translateX(-${index * 100}%)`; updateActiveCard() = `translateX(-${index * 100}%)`;
     });
   </script>
 <audio id="glitch-sfx" src="glitch.mp3" preload="auto"></audio>
