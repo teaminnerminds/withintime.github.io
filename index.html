@@ -11,48 +11,71 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Orbitron', sans-serif; background: #0c0c0c; color: #fff; overflow-x: hidden; }
+    body { font-family: 'Orbitron', sans-serif; background: #0b0710; color: #eee; overflow-x: hidden; }
 
     /* Preloader */
     #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; }
-    #loader-bar { width: 0; height: 4px; background: #00fff6; transition: width 1s ease; }
+    #loader-bar { width: 0; height: 4px; background: #a47aff; transition: width 1s ease; }
 
-    /* Glitch intro */
-    .glitch-container { display: flex; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(180deg, #000, #111 70%, #222); position: relative; overflow: hidden; }
-    .logo { font-size: 3rem; text-transform: uppercase; color: #00fff6; position: relative; animation: glitch 1s infinite; z-index: 2; }
-    @keyframes glitch {
-      0% { text-shadow: 2px 0 red, -2px 0 cyan; }
-      20% { text-shadow: -2px 0 red, 2px 0 cyan; }
-      40% { text-shadow: 2px 0 red, -2px 0 cyan; }
-      60% { text-shadow: -2px 0 red, 2px 0 cyan; }
-      80% { text-shadow: 2px 0 red, -2px 0 cyan; }
-      100% { text-shadow: none; }
+    /* Hero Section */
+    #hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; }
+    #hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('bigimageforweb.png') center/cover no-repeat;
+      filter: brightness(0.6);
+      z-index: 1;
     }
-
-    /* Particle background */
-    #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: transparent; }
+    #hero::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; width: 100%; height: 40%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #0b0710 100%);
+      z-index: 2;
+    }
+    #hero img { width: 45vmin; position: relative; z-index: 3; opacity: 0; transform: scale(0.85); animation: glitch-heavy 3s infinite steps(8); }
 
     section { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 3rem 1rem; position: relative; overflow: hidden; }
 
-    .trailer-section { background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%); }
-    .trailer-section iframe { width: 80%; height: 60vh; border: 3px solid #00fff6; border-radius: 10px; box-shadow: 0 0 20px #00fff6; }
+    h2 { color: #d7c4ff; margin-bottom: 1.5rem; font-size: 2rem; }
 
-    .story, .features { opacity: 0; transform: translateY(80px); }
+    /* Trailer */
+    .trailer-section iframe { width: 80%; height: 60vh; border: 3px solid #a47aff; border-radius: 10px; box-shadow: 0 0 30px #4b2a7d; }
 
+    /* Scroll-in text */
+    .reveal { opacity: 0; transform: translateX(-80px); }
+    .reveal-right { opacity: 0; transform: translateX(80px); }
+
+    /* Story Gallery */
+    .story-gallery { display: flex; gap: 1.5rem; margin-top: 2rem; }
+    .story-gallery img { width: 200px; height: 120px; object-fit: cover; border-radius: 6px; box-shadow: 0 0 12px #5a3b8d; }
+
+    /* Features */
     .features-list { display: flex; flex-direction: column; gap: 1.5rem; max-width: 700px; }
 
+    /* Character Carousel */
     .characters { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
     .carousel { display: flex; overflow: hidden; width: 80%; position: relative; }
     .character-card { min-width: 100%; transition: transform 0.6s ease; text-align: center; }
-    .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 20px #00fff6; }
+    .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 20px #5a3b8d; }
     .nav-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
-    .nav-buttons button { background: #00fff6; color: #000; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold; border-radius: 6px; transition: 0.3s; }
+    .nav-buttons button { background: #a47aff; color: #000; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold; border-radius: 6px; transition: 0.3s; }
     .nav-buttons button:hover { background: #fff; color: #000; }
 
-    footer { padding: 2rem; text-align: center; background: #111; color: #777; }
-    footer a { color: #00fff6; margin: 0 0.5rem; text-decoration: none; transition: 0.3s; }
+    footer { padding: 2rem; text-align: center; background: #0a050f; color: #777; }
+    footer a { color: #a47aff; margin: 0 0.5rem; text-decoration: none; transition: 0.3s; }
     footer a:hover { color: #fff; }
-  </style>
+  @keyframes glitch-heavy {
+  0% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
+  10% { transform: translate(-4px,2px) skew(3deg); filter: hue-rotate(40deg) contrast(140%); }
+  20% { transform: translate(4px,-2px) skew(-3deg); filter: hue-rotate(-40deg) contrast(160%); }
+  30% { transform: translate(-2px,4px) skew(2deg); filter: hue-rotate(80deg) contrast(180%); }
+  40% { transform: translate(2px,-4px) skew(-2deg); filter: hue-rotate(-80deg) contrast(200%); }
+  50% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(110%); }
+  100% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
+}
+</style>
 </head>
 <body>
   <div id="preloader">
@@ -60,23 +83,26 @@
     <div id="loader-bar"></div>
   </div>
 
-  <div class="glitch-container" id="hero">
-    <canvas id="particle-canvas"></canvas>
-    <h1 class="logo">Within Time</h1>
-    <p style="z-index: 2;">A journey beyond reality.</p>
-  </div>
+  <section id="hero">
+    <img src="logotransp.png" id="hero-logo" alt="Within Time Logo" />
+  </section>
 
-  <section class="trailer-section">
+  <section class="trailer-section reveal">
     <h2>Watch the Trailer</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_TRAILER_ID" frameborder="0" allowfullscreen></iframe>
   </section>
 
-  <section class="story">
+  <section class="reveal-right">
     <h2>The Story</h2>
     <p>Enter a fractured world where time itself is unstable. Discover the truth hidden between seconds.</p>
+    <div class="story-gallery">
+      <img src="placeholder1.jpg">
+      <img src="placeholder2.jpg">
+      <img src="placeholder3.jpg">
+    </div>
   </section>
 
-  <section class="features">
+  <section class="reveal">
     <h2>Key Features</h2>
     <div class="features-list">
       <p>⚔️ Turn-based combat with tactical depth.</p>
@@ -85,7 +111,7 @@
     </div>
   </section>
 
-  <section class="characters">
+  <section class="characters reveal-right">
     <h2>Meet the Characters</h2>
     <div class="carousel" id="carousel">
       <div class="character-card">
@@ -117,42 +143,24 @@
   </footer>
 
   <script>
-    // Preloader animation
+    // Preloader
     window.addEventListener('load', () => {
-      const bar = document.getElementById('loader-bar');
-      bar.style.width = '100%';
-      setTimeout(() => {
-        document.getElementById('preloader').style.opacity = '0';
-        setTimeout(() => document.getElementById('preloader').remove(), 600);
-        gsap.fromTo('.logo', {opacity: 0, scale: 0.8}, {opacity: 1, scale: 1, duration: 1, ease: 'power2.out'});
-      }, 1200);
+      document.getElementById('loader-bar').style.width = '100%';
+      setTimeout(() => document.getElementById('preloader').remove(), 1200);
+      gsap.to('#hero-logo', {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});
     });
 
-    // GSAP Scroll animations
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.utils.toArray('.story, .features').forEach(section => {
-      gsap.fromTo(section, {opacity: 0, y: 100}, {
-        opacity: 1, y: 0, duration: 1.2, ease: 'power2.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 85%',
-        }
-      });
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.fromTo(el, {opacity:0, x:-80}, {opacity:1, x:0, duration:1.2, scrollTrigger:{trigger:el, start:'top 80%'}});
     });
 
-    // Parallax background for trailer section
-    gsap.to('.trailer-section', {
-      backgroundPositionY: '50%',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.trailer-section',
-        start: 'top bottom',
-        scrub: true
-      }
+    gsap.utils.toArray('.reveal-right').forEach(el => {
+      gsap.fromTo(el, {opacity:0, x:80}, {opacity:1, x:0, duration:1.2, scrollTrigger:{trigger:el, start:'top 80%'}});
     });
 
-    // Character carousel
+    // Carousel
     let index = 0;
     const cards = document.querySelectorAll('.character-card');
     const carousel = document.getElementById('carousel');
@@ -164,50 +172,6 @@
       index = (index - 1 + cards.length) % cards.length;
       carousel.style.transform = `translateX(-${index * 100}%)`;
     });
-
-    // Particle background setup
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let width, height;
-
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      particles = Array.from({ length: 60 }, () => createParticle());
-    }
-
-    function createParticle() {
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        size: Math.random() * 2 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        opacity: Math.random() * 0.7 + 0.3
-      };
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, width, height);
-      particles.forEach(p => {
-        p.x += p.speedX;
-        p.y += p.speedY;
-
-        if (p.x < 0 || p.x > width) p.speedX *= -1;
-        if (p.y < 0 || p.y > height) p.speedY *= -1;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 255, 246, ${p.opacity})`;
-        ctx.fill();
-      });
-      requestAnimationFrame(animateParticles);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    animateParticles();
   </script>
 </body>
 </html>
