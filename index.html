@@ -26,6 +26,7 @@
       background: url('bigimageforweb.png') center/cover no-repeat;
       filter: brightness(0.6);
       z-index: 1;
+      animation: bg-drift 38s ease-in-out infinite alternate;
     }
     #hero::after {
       content: "";
@@ -152,6 +153,10 @@
 #audioToggle svg{width:22px; height:22px; fill:#cbb5ff; opacity:0.9;} 
 #audioToggle:hover{box-shadow:0 0 18px rgba(164,122,255,0.55);} 
 
+@keyframes bg-drift {
+  0% { background-position: 50% 50%; }
+  100% { background-position: 54% 46%; }
+}
 </style>
 </head>
 <body>
@@ -243,8 +248,14 @@
     <p>&copy; 2025 Within Time Studios</p>
   </footer>
 
+<div style="width:100%; display:flex; justify-content:center; margin:3rem 0;">
+  <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" style="padding:1rem 2.2rem; border:2px solid #cbb5ff; border-radius:8px; color:#e8e0ff; font-size:1.2rem; text-decoration:none; font-weight:600; transition:0.35s;">
+    Wishlist on Steam
+  </a>
+</div>
+
 <!-- Ambient audio (user must provide ambience.mp3) -->
-<audio id="ambience" src="ambience.mp3" loop preload="none"></audio>
+<audio id="ambience" src="Track 1 - Re;Start.mp3" loop preload="none"></audio>
 <button id="audioToggle" aria-label="Toggle ambience" title="Toggle ambience">
   <svg id="icon-sound-on" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M14 10.5c1 .75 1 2.25 0 3"></path><path d="M16 8c2 1.5 2 6 0 7.5"></path></svg>
   <svg id="icon-sound-off" viewBox="0 0 24 24" style="display:none;"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M16 8l5 5m0-5l-5 5" stroke="#cbb5ff" stroke-width="2" fill="none"/></svg>
@@ -255,8 +266,12 @@
     // Preloader
     window.addEventListener('load', () => {
       document.getElementById('loader-bar').style.width = '100%';
-      setTimeout(() => document.getElementById('preloader').remove(), 1200);
-      gsap.to('#hero-logo', {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});
+      setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(()=> preloader.style.display = 'none', 500);
+      }, 800);
+      gsap.to('#hero-logo', {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});, {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});
     });
 
     gsap.registerPlugin(ScrollTrigger);
