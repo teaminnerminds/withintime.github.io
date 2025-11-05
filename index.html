@@ -6,12 +6,12 @@
   <title>Within Time | Official Site</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Orbitron', sans-serif; background: #0b0710; color: #eee; overflow-x: hidden; }
+    body { font-family: 'Unbounded', sans-serif; background: #0b0710; color: #eee; overflow-x: hidden; }
 
     /* Preloader */
     #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; }
@@ -189,35 +189,30 @@
     </div>
   </section>
 
-  <section class="characters reveal-right">
-    <h2>The Scions of Fate</h2>
-    <div class="carousel" id="carousel">
-      <div class="character-card">
-        <img src="yunissilouhette.png" alt="Yunis">
-        <h3>Yunis Caelum</h3>
-        <p>The steady leader who carries the weight of fate.</p>
-      </div>
-      <div class="character-card">
-        <img src="estellasilouhette.png" alt="Estella">
-        <h3>Estella Kisiel</h3>
-        <p>The brilliant strategist of the group. Her insight cuts through uncertainty, and her history with Yunis runs deep — built on years of shared childhood and unspoken understanding.</p>
-      </div>
-      <div class="character-card">
-        <img src="angiesilouhette.png" alt="Angie">
-        <h3>Angie Alfaro</h3>
-        <p>Warm, optimistic, and fiercely capable. A master of firearms with sharp instincts, Angie holds the emotional center of the group, lifting others when the weight of fate grows too heavy.</p>
-      </div>
-      <div class="character-card">
-        <img src="rictorsilouhette.png" alt="Rictor">
-        <h3>Rictor Fitzsimmons</h3>
-        <p>A powerhouse shaped by hardship — once a fighter on the streets, now a guardian to his friends. Strong in body, warm in heart, and always ready to crack a joke to break the tension.</p>
-      </div>
+  <section class="characters reveal-right" id="characters-section" style="display:flex;align-items:center;justify-content:center;flex-direction:row;gap:4rem;min-height:100vh;padding:4rem 2rem;">
+  <div class="char-panel" style="position:relative;width:45%;height:85vh;display:flex;align-items:center;justify-content:center;">
+    <svg class="arc-frame" width="100%" height="100%" viewBox="0 0 400 800" style="position:absolute;z-index:2;pointer-events:none;">
+      <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.35)" stroke-width="6" />
+      <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.15)" stroke-width="14" filter="url(#glow)" />
+      <defs>
+        <filter id="glow"><feGaussianBlur stdDeviation="14" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+    </svg>
+    <canvas id="charParticles" style="position:absolute;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+    <img id="charSilhouette" src="yunissilouhette.png" style="height:90%;position:relative;z-index:3;object-fit:contain;opacity:0;transform:scale(0.95);" />
+  </div>
+
+  <div class="char-info" style="width:40%;text-align:left;">
+    <h2 id="charName" style="font-size:2.6rem;margin-bottom:0.5rem;color:#d7c4ff;">Yunis Caelum</h2>
+    <h3 id="charRole" style="font-size:1.25rem;margin-bottom:1.5rem;color:#a88ce9;">Leader of the Scions of Fate</h3>
+    <p id="charDesc" style="font-size:1.05rem;line-height:1.65;color:#e8e0ff;opacity:0;">A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies the quiet weight of expectations he cannot always carry.</p>
+
+    <div style="display:flex;justify-content:space-between;margin-top:2.5rem;">
+      <button id="charPrev" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">← Prev</button>
+      <button id="charNext" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">Next →</button>
     </div>
-    <div class="nav-buttons">
-      <button id="prev">Prev</button>
-      <button id="next">Next</button>
-    </div>
-  </section>
+  </div>
+</section>
 
   <footer>
     <p>Follow us:</p>
@@ -234,6 +229,21 @@
     });
 
     gsap.registerPlugin(ScrollTrigger);
+
+// Cinematic section transitions
+const sections = document.querySelectorAll('section');
+sections.forEach((sec) => {
+  gsap.from(sec, {
+    opacity: 0,
+    y: 40,
+    duration: 0.6,
+    ease: 'power2.out',
+    scrollTrigger: {
+      trigger: sec,
+      start: 'top 85%'
+    }
+  });
+});
 
     gsap.utils.toArray('.reveal').forEach(el => {
       gsap.fromTo(el, {opacity:0, x:-80}, {opacity:1, x:0, duration:1.2, scrollTrigger:{trigger:el, start:'top 80%'}});
