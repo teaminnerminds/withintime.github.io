@@ -4,24 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Within Time | Official Site</title>
+
+  <!-- Fonts & GSAP -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Unbounded', sans-serif; background: #0b0710; color: #eee; overflow-x: hidden; }
-
-    /* Preloader */
-    
 
     /* Hero Section */
     #hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; }
     #hero::before {
       content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
+      position: absolute; inset: 0;
       background: url('bigimageforweb.png') center/cover no-repeat;
       filter: brightness(0.6);
       z-index: 1;
@@ -29,15 +28,14 @@
     }
     #hero::after {
       content: "";
-      position: absolute;
-      bottom: 0; left: 0; width: 100%; height: 40%;
+      position: absolute; left: 0; bottom: 0; width: 100%; height: 40%;
       background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #0b0710 100%);
       z-index: 2;
     }
     #hero img { width: 45vmin; position: relative; z-index: 3; opacity: 0; transform: scale(0.85); }
 
+    /* Sections */
     section { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 3rem 1rem; position: relative; overflow: hidden; }
-
     h2 { color: #d7c4ff; margin-bottom: 1.5rem; font-size: 2rem; }
 
     /* Trailer */
@@ -48,130 +46,91 @@
     .reveal-right { opacity: 0; transform: translateX(80px); text-shadow: 0 0 0 rgba(207,174,255,0.35); transition: text-shadow 1s ease-out; }
 
     /* Story Gallery */
-    .story-gallery { display: flex; gap: 1.5rem; margin-top: 2rem; }
+    .story-gallery { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
     .story-gallery img { width: clamp(240px, 28vw, 420px); height: auto; object-fit: cover; border-radius: 10px; box-shadow: 0 0 22px rgba(90,59,141,0.55); }
 
     /* Features */
     .features-list { display: flex; flex-direction: column; gap: 1.5rem; max-width: 700px; }
 
-    /* Character Carousel */
+    /* Characters */
     .characters { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
     .carousel { display: flex; overflow: hidden; width: 80%; position: relative; }
     .character-card { min-width: 100%; transition: transform 0.6s ease; text-align: center; }
     .character-card img { width: 200px; height: auto; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 0 20px #5a3b8d; position: relative; z-index: 3; }
 
-/* Character Card Ambient Effects */
-.character-card { position: relative; overflow: visible; }
+    /* Character panel */
+    .panel-texture { display: none; } /* disabled per your request */
 
-/* Soft glow remains */
-.character-card::before {
-  content: "";
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 260px; height: 260px;
-  background: radial-gradient(circle, rgba(164,122,255,0.45) 0%, rgba(50,0,80,0.0) 70%);
-  filter: blur(40px);
-  z-index: 1;
-  animation: hero-glow 6s ease-in-out infinite alternate;
-}
+    /* Hover micro-glitch for characters */
+    .character-card:hover img { animation: small-glitch 0.45s steps(6) 1; }
 
-/* Crescent arc highlight (ACTIVE character only) */
-.character-card.active::after {
-  content: "";
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(12deg);
-  width: 300px; height: 300px;
-  border-radius: 50%;
-  border: 8px solid rgba(164,122,255,0.55);
-  border-color: rgba(164,122,255,0.65) transparent transparent transparent;
-  animation: crescent-pulse 4s ease-in-out infinite;
-  z-index: 2;
-}
-
-/* Nebula drift stays */
-.character-card .nebula { display:none; }
-
-.character-card:hover img {
-  animation: small-glitch 0.45s steps(6) 1;
-}
-    .nav-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
-    .nav-buttons button { background: #a47aff; color: #000; border: none; padding: 0.5rem 1rem; cursor: pointer; font-weight: bold; border-radius: 6px; transition: 0.3s; }
-    .nav-buttons button:hover { background: #fff; color: #000; }
-
+    /* Footer */
     footer { padding: 2rem; text-align: center; background: #0a050f; color: #777; }
     footer a { color: #a47aff; margin: 0 0.5rem; text-decoration: none; transition: 0.3s; }
     footer a:hover { color: #fff; }
-  @keyframes glitch-heavy {
-  0% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
-  10% { transform: translate(-4px,2px) skew(3deg); filter: hue-rotate(40deg) contrast(140%); }
-  20% { transform: translate(4px,-2px) skew(-3deg); filter: hue-rotate(-40deg) contrast(160%); }
-  30% { transform: translate(-2px,4px) skew(2deg); filter: hue-rotate(80deg) contrast(180%); }
-  40% { transform: translate(2px,-4px) skew(-2deg); filter: hue-rotate(-80deg) contrast(200%); }
-  50% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(110%); }
-  100% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
-}
-/* Glitch burst effect */
-.glitch-burst { animation: glitch-heavy 0.4s steps(8) 1; }
 
-/* Hero particles */
-#hero-particles { position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; }
-@keyframes hero-glow {
-  0% { opacity: 0.4; }
-  100% { opacity: 0.8; }
-}
-@keyframes nebula-sway {
-  0% { transform: translate(-4px, -4px) scale(1.02); }
-  100% { transform: translate(4px, 4px) scale(1.05); }
-}
-@keyframes small-glitch {
-  0% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
-  20% { filter: hue-rotate(40deg) contrast(140%); transform: translate(-3px,2px); }
-  40% { filter: hue-rotate(-40deg) contrast(160%); transform: translate(3px,-2px); }
-  60% { filter: hue-rotate(20deg) contrast(130%); transform: translate(-2px,1px); }
-  80% { filter: hue-rotate(-20deg) contrast(120%); transform: translate(2px,-1px); }
-  100% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
-}
-@keyframes crescent-pulse {
-  0% { opacity: 0.35; transform: translate(-50%, -50%) rotate(12deg) scale(1.0); }
-  100% { opacity: 0.8; transform: translate(-50%, -50%) rotate(12deg) scale(1.08); }
-}
-/* Character panel textured vignette (uneven) */
-.panel-texture{display:none;}
+    /* Ambient audio toggle */
+    #audioToggle{position:fixed; right:18px; bottom:18px; width:44px; height:44px; border-radius:999px; background:#1a1126; border:1px solid #3b2a56; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:999; box-shadow:0 0 14px rgba(90,59,141,0.35);} 
+    #audioToggle svg{width:22px; height:22px; fill:#cbb5ff; opacity:0.9;} 
+    #audioToggle:hover{box-shadow:0 0 18px rgba(164,122,255,0.55);} 
 
-/* Ambient audio toggle */
-#audioToggle{position:fixed; right:18px; bottom:18px; width:44px; height:44px; border-radius:999px; background:#1a1126; border:1px solid #3b2a56; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:999; box-shadow:0 0 14px rgba(90,59,141,0.35);} 
-#audioToggle svg{width:22px; height:22px; fill:#cbb5ff; opacity:0.9;} 
-#audioToggle:hover{box-shadow:0 0 18px rgba(164,122,255,0.55);} 
+    /* Hero particles canvas */
+    #hero-particles { position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none; }
 
-@keyframes bg-drift {
-  0% { background-position: 50% 50%; }
-  100% { background-position: 54% 46%; }
-}
-.glow-phrase { text-shadow: 0 0 0 rgba(207,174,255,0); transition: text-shadow 1.2s ease-out; }
-.glow-phrase.glow-active { text-shadow: 0 0 14px rgba(207,174,255,0.35); }
-</style>
-<style>
-/* Preloader P1 */
-#preloader{position:fixed;inset:0;background:#0b0710;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s ease;}#preloader.fade-out{opacity:0;pointer-events:none;}
-#preloader img{width:160px;opacity:.3;animation:pulse-logo 2.4s ease-in-out infinite;}@keyframes pulse-logo{0%{transform:scale(.92);opacity:.25;}50%{transform:scale(1);opacity:.6;}100%{transform:scale(.92);opacity:.25;}}
-</style>
+    /* Subtle floating motion for hero logo */
+    #hero-logo { animation: hero-float 6s ease-in-out infinite alternate; }
+    @keyframes hero-float { 0% { transform: translateY(-4px) scale(1); } 100% { transform: translateY(6px) scale(1.01); } }
+
+    /* Keyframes */
+    @keyframes bg-drift { 0% { background-position: 50% 50%; } 100% { background-position: 54% 46%; } }
+    @keyframes glitch-heavy {
+      0% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
+      10% { transform: translate(-4px,2px) skew(3deg); filter: hue-rotate(40deg) contrast(140%); }
+      20% { transform: translate(4px,-2px) skew(-3deg); filter: hue-rotate(-40deg) contrast(160%); }
+      30% { transform: translate(-2px,4px) skew(2deg); filter: hue-rotate(80deg) contrast(180%); }
+      40% { transform: translate(2px,-4px) skew(-2deg); filter: hue-rotate(-80deg) contrast(200%); }
+      50% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(110%); }
+      100% { transform: translate(0) skew(0); filter: hue-rotate(0deg) contrast(100%); }
+    }
+    .glitch-burst { animation: glitch-heavy 0.4s steps(8) 1; }
+    @keyframes small-glitch {
+      0% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
+      20% { filter: hue-rotate(40deg) contrast(140%); transform: translate(-3px,2px); }
+      40% { filter: hue-rotate(-40deg) contrast(160%); transform: translate(3px,-2px); }
+      60% { filter: hue-rotate(20deg) contrast(130%); transform: translate(-2px,1px); }
+      80% { filter: hue-rotate(-20deg) contrast(120%); transform: translate(2px,-1px); }
+      100% { filter: hue-rotate(0deg) contrast(100%); transform: translate(0); }
+    }
+
+    /* Optional phrase glow (S3-ready if you wrap with .glow-phrase) */
+    .glow-phrase { text-shadow: 0 0 0 rgba(207,174,255,0); transition: text-shadow 1.2s ease-out; }
+    .glow-phrase.glow-active { text-shadow: 0 0 14px rgba(207,174,255,0.35); }
+
+    /* Preloader P1 (kept & fixed) */
+    #preloader{position:fixed;inset:0;background:#0b0710;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s ease;}
+    #preloader.fade-out{opacity:0;pointer-events:none;}
+    #preloader img{width:160px;opacity:.3;animation:pulse-logo 2.4s ease-in-out infinite;}
+    @keyframes pulse-logo{0%{transform:scale(.92);opacity:.25;}50%{transform:scale(1);opacity:.6;}100%{transform:scale(.92);opacity:.25;}}
+  </style>
 </head>
 <body>
-<div id="preloader"><img src="logotransp.png" alt="Loading"></div>
-  
-  </div>
 
-  <section id="hero"><canvas id="hero-particles"></canvas>
+  <!-- Preloader -->
+  <div id="preloader"><img src="logotransp.png" alt="Loading"></div>
+
+  <!-- Hero -->
+  <section id="hero">
+    <canvas id="hero-particles"></canvas>
     <img src="logotransp.png" id="hero-logo" alt="Within Time Logo" />
   </section>
 
+  <!-- Trailer -->
   <section class="trailer-section reveal">
     <h2>Watch the Trailer</h2>
     <iframe src="https://www.youtube.com/embed/YOUR_TRAILER_ID" frameborder="0" allowfullscreen></iframe>
   </section>
 
+  <!-- Story -->
   <section class="reveal-right">
     <h2>The Story</h2>
     <div style="max-width:1000px; text-align:left; font-size:1.05rem; line-height:1.8; color:#e8e0ff;">
@@ -186,6 +145,7 @@
     </div>
   </section>
 
+  <!-- Gameplay -->
   <section class="reveal">
     <h2>Gameplay & Content</h2>
     <img src="titlescreenonepen.png" alt="Gameplay Highlight" style="width:70%; border-radius:8px; margin-bottom:2rem; box-shadow:0 0 30px #4b2a7d;">
@@ -199,6 +159,7 @@
     </div>
   </section>
 
+  <!-- Key Features -->
   <section class="reveal">
     <h2>Key Features</h2>
     <div class="features-list">
@@ -208,162 +169,173 @@
     </div>
   </section>
 
+  <!-- Characters -->
   <section class="characters reveal-right" id="characters-section" style="display:flex;align-items:center;justify-content:center;flex-direction:row;gap:4rem;min-height:100vh;padding:4rem 2rem;">
-  <div class="char-panel" style="position:relative;width:45%;height:85vh;display:flex;align-items:center;justify-content:center;">
-    <div class="panel-texture"></div>
-    <img class="moon-back" style="position:absolute;height:105%;opacity:0.24;filter:brightness(1.18) saturate(0) drop-shadow(0 0 38px rgba(164,122,255,0.75));z-index:1;"logotransp.png" style="position:absolute;height:105%;opacity:0.18;filter:brightness(1.4) saturate(0) drop-shadow(0 0 26px rgba(164,122,255,0.55));z-index:1;" />
-    <svg class="arc-frame" width="100%" height="100%" viewBox="0 0 400 800" style="position:absolute;z-index:3;pointer-events:none;">
-    <div class="panel-texture"></div>
-    <svg class="arc-frame" width="100%" height="100%" viewBox="0 0 400 800" style="position:absolute;z-index:3;pointer-events:none;">
-      <!-- Main arc -->
-      <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.35)" stroke-width="6" />
-      <!-- Glow -->
-      <defs>
-        <filter id="glow"><feGaussianBlur stdDeviation="14" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.15)" stroke-width="14" filter="url(#glow)" />
-      <!-- Subtle fractured cracks following arc -->
-      <path d="M180 60 Q300 220 315 400" stroke="rgba(207,174,255,0.25)" stroke-width="1.2" stroke-dasharray="6 10" />
-      <path d="M220 100 Q330 260 330 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="5 12" />
-      <path d="M170 730 Q70 580 70 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="4 10" />
-    </svg>
-    <canvas id="charParticles" style="position:absolute;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
-    <img id="charSilhouette" src="yunissilouhette.png" style="height:90%;position:relative;z-index:3;object-fit:contain;opacity:0;transform:scale(0.95);" />
-  </div>
-
-  <div class="char-info" style="width:40%;text-align:left;">
-    <h2 id="charName" style="font-size:2.6rem;margin-bottom:0.5rem;color:#d7c4ff;">Yunis Caelum</h2>
-    <h3 id="charRole" style="font-size:1.25rem;margin-bottom:1.5rem;color:#a88ce9;">Leader of the Scions of Fate</h3>
-    <p id="charDesc" style="font-size:1.05rem;line-height:1.65;color:#e8e0ff;opacity:0;">A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies the quiet weight of expectations he cannot always carry.</p>
-
-    <div style="display:flex;justify-content:space-between;margin-top:2.5rem;">
-      <button id="charPrev" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">← Prev</button>
-      <button id="charNext" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">Next →</button>
+    <div class="char-panel" style="position:relative;width:45%;height:85vh;display:flex;align-items:center;justify-content:center;">
+      <img class="moon-back" src="logotransp.png"
+           style="position:absolute;height:105%;opacity:0.24;
+           filter:brightness(1.18) saturate(0) drop-shadow(0 0 38px rgba(164,122,255,0.75));
+           z-index:1;pointer-events:none;" />
+      <svg class="arc-frame" width="100%" height="100%" viewBox="0 0 400 800" style="position:absolute;z-index:3;pointer-events:none;">
+        <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.35)" stroke-width="6" />
+        <defs><filter id="glow"><feGaussianBlur stdDeviation="14" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.15)" stroke-width="14" filter="url(#glow)" />
+        <path d="M180 60 Q300 220 315 400" stroke="rgba(207,174,255,0.25)" stroke-width="1.2" stroke-dasharray="6 10" />
+        <path d="M220 100 Q330 260 330 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="5 12" />
+        <path d="M170 730 Q70 580 70 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="4 10" />
+      </svg>
+      <canvas id="charParticles" style="position:absolute;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+      <img id="charSilhouette" src="yunissilouhette.png" style="height:90%;position:relative;z-index:3;object-fit:contain;opacity:0;transform:scale(0.95);" />
     </div>
-  </div>
-</section>
 
+    <div class="char-info" style="width:40%;text-align:left;">
+      <h2 id="charName" style="font-size:2.6rem;margin-bottom:0.5rem;color:#d7c4ff;">Yunis Caelum</h2>
+      <h3 id="charRole" style="font-size:1.25rem;margin-bottom:1.5rem;color:#a88ce9;">Leader of the Scions of Fate</h3>
+      <p id="charDesc" style="font-size:1.05rem;line-height:1.65;color:#e8e0ff;opacity:0;">A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies the quiet weight of expectations he cannot always carry.</p>
+
+      <div style="display:flex;justify-content:space-between;margin-top:2.5rem;">
+        <button id="charPrev" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">← Prev</button>
+        <button id="charNext" style="background:none;border:none;color:#cbb5ff;font-size:1.1rem;cursor:pointer;">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer>
     <p>Follow us:</p>
     <a href="#">Steam</a> | <a href="#">Twitter</a> | <a href="#">YouTube</a> | <a href="#">Discord</a>
     <p>&copy; 2025 Within Time Studios</p>
   </footer>
 
-<div style="width:100%; display:flex; justify-content:center; margin:3rem 0;">
-  <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" style="padding:1rem 2.2rem; border:2px solid #cbb5ff; border-radius:8px; color:#e8e0ff; font-size:1.2rem; text-decoration:none; font-weight:600; transition:0.35s;">
-    Wishlist on Steam
-  </a>
-</div>
+  <!-- Steam CTA -->
+  <div style="width:100%; display:flex; justify-content:center; margin:3rem 0;">
+    <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" style="padding:1rem 2.2rem; border:2px solid #cbb5ff; border-radius:8px; color:#e8e0ff; font-size:1.2rem; text-decoration:none; font-weight:600; transition:0.35s;">
+      Wishlist on Steam
+    </a>
+  </div>
 
-<!-- Ambient audio (user must provide ambience.mp3) -->
-<audio id="ambience" src="Track 1 - Re;Start.mp3" loop preload="none"></audio>
-<button id="audioToggle" aria-label="Toggle ambience" title="Toggle ambience">
-  <svg id="icon-sound-on" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M14 10.5c1 .75 1 2.25 0 3"></path><path d="M16 8c2 1.5 2 6 0 7.5"></path></svg>
-  <svg id="icon-sound-off" viewBox="0 0 24 24" style="display:none;"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M16 8l5 5m0-5l-5 5" stroke="#cbb5ff" stroke-width="2" fill="none"/></svg>
-</button>
-
-/* Floating subtle hero logo motion */
-#hero-logo {
-  animation: hero-float 6s ease-in-out infinite alternate;
-}
-
-@keyframes hero-float {
-  0% { transform: translateY(-4px) scale(1); }
-  100% { transform: translateY(6px) scale(1.01); }
-}
+  <!-- Ambient audio -->
+  <audio id="ambience" src="Track 1 - Re;Start.mp3" loop preload="none"></audio>
+  <button id="audioToggle" aria-label="Toggle ambience" title="Toggle ambience">
+    <svg id="icon-sound-on" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M14 10.5c1 .75 1 2.25 0 3"></path><path d="M16 8c2 1.5 2 6 0 7.5"></path></svg>
+    <svg id="icon-sound-off" viewBox="0 0 24 24" style="display:none;"><path d="M3 10v4h4l5 5V5L7 10H3z"></path><path d="M16 8l5 5m0-5l-5 5" stroke="#cbb5ff" stroke-width="2" fill="none"/></svg>
+  </button>
 
   <script>
-// ✅ Preloader
-window.addEventListener('load',()=>{
- const p=document.getElementById('preloader');
- setTimeout(()=>p.classList.add('fade-out'),250);
-});
+    // ✅ Preloader fade-out
+    window.addEventListener('load', () => {
+      const p = document.getElementById('preloader');
+      setTimeout(() => p.classList.add('fade-out'), 250);
+      // Hero logo intro (kept elegant)
+      gsap.to('#hero-logo', { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out' });
+    });
 
-// ✅ Hero Logo Intro
-window.addEventListener('load',()=>{
- gsap.to('#hero-logo',{opacity:1,scale:1,duration:1.4,ease:'power2.out'});
-});
+    gsap.registerPlugin(ScrollTrigger);
 
-gsap.registerPlugin(ScrollTrigger);
+    // Section reveals
+    gsap.utils.toArray('section').forEach(sec => {
+      gsap.from(sec, { opacity: 0, y: 40, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: sec, start: 'top 85%' } });
+    });
+    gsap.utils.toArray('.reveal').forEach(el => {
+      gsap.fromTo(el, { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 1.1, scrollTrigger: { trigger: el, start: 'top 80%' } });
+    });
+    gsap.utils.toArray('.reveal-right').forEach(el => {
+      gsap.fromTo(el, { opacity: 0, x: 80 }, { opacity: 1, x: 0, duration: 1.1, scrollTrigger: { trigger: el, start: 'top 80%' } });
+    });
 
-gsap.utils.toArray('section').forEach(sec=>{
- gsap.from(sec,{opacity:0,y:40,duration:.6,ease:'power2.out',scrollTrigger:{trigger:sec,start:'top 85%'}});
-});
+    // ✅ Character Switcher
+    let index = 0;
+    const characters = [
+      { name: 'Yunis Caelum', role: 'The Light of Humanity', img: 'yunissilouhette.png', desc: 'A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies a quiet weight — one he refuses to let break those he protects.' },
+      { name: 'Estella Kisiel', role: 'The Visionary', img: 'estellasilouhette.png', desc: 'Brilliant, calculating, and always five steps ahead. Estella’s insight guides the Scions through paths unseen, her history with Yunis deepening the weight of every choice made.' },
+      { name: 'Angie Alfaro', role: 'The Ember Soul', img: 'angiesilouhette.png', desc: 'Warm-hearted and unwavering, Angie carries the spark that prevents the Scions from breaking. A master of firearms whose optimism burns brighter than the darkness around them.' },
+      { name: 'Rictor Fitzsimmons', role: 'The Iron Heart of Cinceria', img: 'rictorsilouhette.png', desc: 'Forged through hardship and tempered through loyalty. Rictor’s strength shields his friends, but it is his compassion that binds them together when hope begins to fracture.' }
+    ];
+    const nameEl = document.getElementById('charName');
+    const roleEl = document.getElementById('charRole');
+    const descEl = document.getElementById('charDesc');
+    const imgEl = document.getElementById('charSilhouette');
 
-gsap.utils.toArray('.reveal').forEach(el=>{
- gsap.fromTo(el,{opacity:0,x:-80},{opacity:1,x:0,duration:1.1,scrollTrigger:{trigger:el,start:'top 80%'}});
-});
+    function showCharacter(i) {
+      const c = characters[i];
+      gsap.to([imgEl, descEl], { opacity: 0, y: 10, duration: 0.2, onComplete: () => {
+        nameEl.textContent = c.name;
+        roleEl.textContent = c.role;
+        descEl.textContent = c.desc;
+        imgEl.src = c.img;
+        gsap.fromTo([imgEl, descEl], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' });
+      }});
+    }
+    showCharacter(index);
 
-gsap.utils.toArray('.reveal-right').forEach(el=>{
- gsap.fromTo(el,{opacity:0,x:80},{opacity:1,x:0,duration:1.1,scrollTrigger:{trigger:el,start:'top 80%'}});
-});
+    document.getElementById('charNext').onclick = () => { index = (index + 1) % characters.length; showCharacter(index); }
+    document.getElementById('charPrev').onclick = () => { index = (index - 1 + characters.length) % characters.length; showCharacter(index); }
 
-// ✅ Character Switcher
-let index=0;
-const characters=[
- {name:'Yunis Caelum',role:'The Light of Humanity',img:'yunissilouhette.png',desc:'A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies a quiet weight — one he refuses to let break those he protects.'},
- {name:'Estella Kisiel',role:'The Visionary',img:'estellasilouhette.png',desc:'Brilliant, calculating, and always five steps ahead. Estella’s insight guides the Scions through paths unseen, her history with Yunis deepening the weight of every choice made.'},
- {name:'Angie Alfaro',role:'The Ember Soul',img:'angiesilouhette.png',desc:'Warm-hearted and unwavering, Angie carries the spark that prevents the Scions from breaking. A master of firearms whose optimism burns brighter than the darkness around them.'},
- {name:'Rictor Fitzsimmons',role:'The Iron Heart of Cinceria',img:'rictorsilouhette.png',desc:'Forged through hardship and tempered through loyalty. Rictor’s strength shields his friends, but it is his compassion that binds them together when hope begins to fracture.'}
-];
-const nameEl=document.getElementById('charName');
-const roleEl=document.getElementById('charRole');
-const descEl=document.getElementById('charDesc');
-const imgEl=document.getElementById('charSilhouette');
+    // ✅ Ambient Audio: starts on first interaction; toggle works
+    const audio = document.getElementById('ambience');
+    let audioStarted = false;
+    function startAudio() {
+      if (!audioStarted) {
+        audioStarted = true;
+        audio.volume = 0;
+        audio.play().then(() => gsap.to(audio, { volume: 0.12, duration: 2 })).catch(() => {});
+      }
+    }
+    ['click','scroll','keydown','mousemove','touchstart'].forEach(ev => window.addEventListener(ev, startAudio, { once: true }));
 
-function showCharacter(i){const c=characters[i];gsap.to([imgEl,descEl],{opacity:0,y:10,duration:.2,onComplete:()=>{nameEl.textContent=c.name;roleEl.textContent=c.role;descEl.textContent=c.desc;imgEl.src=c.img;gsap.fromTo([imgEl,descEl],{opacity:0,y:20},{opacity:1,y:0,duration:.45,ease:'power2.out'});}});}
-showCharacter(index);
+    // Audio toggle button
+    (function(){
+      const btn = document.getElementById('audioToggle');
+      const on = document.getElementById('icon-sound-on');
+      const off = document.getElementById('icon-sound-off');
+      let enabled = false;
+      function setIcons(){ on.style.display = enabled ? 'block' : 'none'; off.style.display = enabled ? 'none' : 'block'; }
+      setIcons();
+      btn.addEventListener('click', async () => {
+        enabled = !enabled; setIcons();
+        try {
+          if (enabled) {
+            if (audio.paused) await audio.play();
+            gsap.to(audio, { volume: 0.12, duration: 1.2, ease: 'power2.out' });
+          } else {
+            gsap.to(audio, { volume: 0, duration: 1, onComplete: () => audio.pause() });
+          }
+        } catch(e) { enabled = false; setIcons(); }
+      });
+    })();
 
-document.getElementById('charNext').onclick=()=>{index=(index+1)%characters.length;showCharacter(index);} 
+    // 🟣 Purple drifting particles in hero section
+    const hcanvas = document.getElementById('hero-particles');
+    const hctx = hcanvas.getContext('2d');
+    let hw, hh, hparticles;
 
-document.getElementById('charPrev').onclick=()=>{index=(index-1+characters.length)%characters.length;showCharacter(index);} 
-
-// ✅ Ambient Audio Autoplay (plays after first interaction)
-const audio=document.getElementById('ambience');
-let audioStarted=false;
-function startAudio(){ if(!audioStarted){ audioStarted=true; audio.volume=0; audio.play().then(()=>{ gsap.to(audio,{volume:.12,duration:2}); }).catch(()=>{}); }}
-['click','scroll','keydown','mousemove','touchstart'].forEach(ev=>{
-  window.addEventListener(ev,startAudio,{once:true});
-});
-
-// 🟣 Purple drifting particles in hero section
-const hcanvas = document.getElementById('hero-particles');
-const hctx = hcanvas.getContext('2d');
-let hw, hh, hparticles;
-
-function hresize(){
-  hw = hcanvas.width = window.innerWidth;
-  hh = hcanvas.height = window.innerHeight;
-  hparticles = Array.from({length: 50}, () => ({
-    x: Math.random() * hw,
-    y: Math.random() * hh,
-    s: Math.random() * 2 + 1,
-    dx: (Math.random() - 0.5) * 0.3,
-    dy: (Math.random() - 0.5) * 0.3,
-    o: Math.random() * 0.5 + 0.25
-  }));
-}
-
-function hanim(){
-  hctx.clearRect(0, 0, hw, hh);
-  hparticles.forEach(p => {
-    p.x += p.dx;
-    p.y += p.dy;
-    if (p.x < 0 || p.x > hw) p.dx *= -1;
-    if (p.y < 0 || p.y > hh) p.dy *= -1;
-
-    hctx.beginPath();
-    hctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
-    hctx.fillStyle = `rgba(164,122,255,${p.o})`;
-    hctx.fill();
-  });
-  requestAnimationFrame(hanim);
-}
-
-window.addEventListener('resize', hresize);
-hresize();
-hanim();
-
-</script>
+    function hresize(){
+      hw = hcanvas.width = window.innerWidth;
+      hh = hcanvas.height = window.innerHeight;
+      hparticles = Array.from({length: 50}, () => ({
+        x: Math.random() * hw,
+        y: Math.random() * hh,
+        s: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: (Math.random() - 0.5) * 0.3,
+        o: Math.random() * 0.5 + 0.25
+      }));
+    }
+    function hanim(){
+      hctx.clearRect(0, 0, hw, hh);
+      hparticles.forEach(p => {
+        p.x += p.dx; p.y += p.dy;
+        if (p.x < 0 || p.x > hw) p.dx *= -1;
+        if (p.y < 0 || p.y > hh) p.dy *= -1;
+        hctx.beginPath();
+        hctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+        hctx.fillStyle = `rgba(164,122,255,${p.o})`;
+        hctx.fill();
+      });
+      requestAnimationFrame(hanim);
+    }
+    window.addEventListener('resize', hresize);
+    hresize(); hanim();
+  </script>
 </body>
 </html>
