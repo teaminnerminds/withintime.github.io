@@ -62,7 +62,7 @@
     .panel-texture { display: none; } /* disabled per your request */
 
     /* Hover micro-glitch for characters */
-    .character-card:hover img { animation: small-glitch 0.45s steps(6) 1; }
+    .character-card:hover img { animation: small-glitch 0.30s steps(4) 1; }
 
     /* Footer */
     footer { padding: 2rem; text-align: center; background: #0a050f; color: #777; }
@@ -111,6 +111,33 @@
     #preloader.fade-out{opacity:0;pointer-events:none;}
     #preloader img{width:160px;opacity:.3;animation:pulse-logo 2.4s ease-in-out infinite;}
     @keyframes pulse-logo{0%{transform:scale(.92);opacity:.25;}50%{transform:scale(1);opacity:.6;}100%{transform:scale(.92);opacity:.25;}}
+
+    /* ===== Character silhouette effects (bottom fade + G-LOOP) ===== */
+    #charSilhouette{
+      /* keep your existing sizing from inline style, add effects here for all browsers */
+      -webkit-mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 62%, rgba(255,255,255,0) 100%);
+              mask-image: linear-gradient(to bottom, rgba(255,255,255,1) 62%, rgba(255,255,255,0) 100%);
+      filter: drop-shadow(0 0 20px rgba(164,122,255,0.45));
+      animation: char-glitch-loop 6s linear infinite;
+    }
+    @keyframes char-glitch-loop{
+      0%   { filter: drop-shadow(0 0 12px rgba(164,122,255,.30)) hue-rotate(0deg); transform: translateZ(0); }
+      20%  { filter: drop-shadow(0 0 14px rgba(164,122,255,.40)) hue-rotate(6deg); }
+      40%  { filter: drop-shadow(0 0 10px rgba(164,122,255,.28)) hue-rotate(-6deg); }
+      60%  { filter: drop-shadow(0 0 16px rgba(164,122,255,.44)) hue-rotate(4deg); }
+      80%  { filter: drop-shadow(0 0 12px rgba(164,122,255,.32)) hue-rotate(-4deg); }
+      100% { filter: drop-shadow(0 0 12px rgba(164,122,255,.30)) hue-rotate(0deg); }
+    }
+
+    /* one-shot burst for switching */
+    @keyframes char-burst{
+      0%{ clip-path: inset(0 0 0 0); }
+      20%{ clip-path: inset(0 0 2px 0); }
+      35%{ clip-path: inset(2px 0 0 0); }
+      50%{ clip-path: inset(0 0 0 0); }
+      70%{ clip-path: inset(1px 0 1px 0); }
+      100%{ clip-path: inset(0 0 0 0); }
+    }
   </style>
 </head>
 <body>
@@ -127,7 +154,7 @@
   <!-- Trailer -->
   <section class="trailer-section reveal">
     <h2>Watch the Trailer</h2>
-    <iframe src="https://www.youtube.com/embed/YOUR_TRAILER_ID" frameborder="0" allowfullscreen></iframe>
+    <iframe src="https://www.youtube.com/embed/AZx1WWpc7b0" frameborder="0" allowfullscreen></iframe>
   </section>
 
   <!-- Story -->
@@ -176,14 +203,7 @@
            style="position:absolute;height:105%;opacity:0.24;
            filter:brightness(1.18) saturate(0) drop-shadow(0 0 38px rgba(164,122,255,0.75));
            z-index:1;pointer-events:none;" />
-      <svg class="arc-frame" width="100%" height="100%" viewBox="0 0 400 800" style="position:absolute;z-index:3;pointer-events:none;">
-        <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.35)" stroke-width="6" />
-        <defs><filter id="glow"><feGaussianBlur stdDeviation="14" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-        <path d="M200 10 Q350 200 350 400 Q350 600 200 790 Q50 600 50 400 Q50 200 200 10 Z" fill="none" stroke="rgba(164,122,255,0.15)" stroke-width="14" filter="url(#glow)" />
-        <path d="M180 60 Q300 220 315 400" stroke="rgba(207,174,255,0.25)" stroke-width="1.2" stroke-dasharray="6 10" />
-        <path d="M220 100 Q330 260 330 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="5 12" />
-        <path d="M170 730 Q70 580 70 410" stroke="rgba(207,174,255,0.2)" stroke-width="1" stroke-dasharray="4 10" />
-      </svg>
+      <!-- removed purple arc SVG -->
       <canvas id="charParticles" style="position:absolute;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
       <img id="charSilhouette" src="yunissilouhette.png" style="height:90%;position:relative;z-index:3;object-fit:contain;opacity:0;transform:scale(0.95);" />
     </div>
@@ -226,7 +246,7 @@
     window.addEventListener('load', () => {
       const p = document.getElementById('preloader');
       setTimeout(() => p.classList.add('fade-out'), 250);
-      // Hero logo intro (kept elegant)
+      // Hero logo intro
       gsap.to('#hero-logo', { opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out' });
     });
 
@@ -258,12 +278,18 @@
 
     function showCharacter(i) {
       const c = characters[i];
-      gsap.to([imgEl, descEl], { opacity: 0, y: 10, duration: 0.2, onComplete: () => {
+      gsap.to([imgEl, descEl, nameEl, roleEl], { opacity: 0, y: 10, duration: 0.18, ease: 'power2.in', onComplete: () => {
         nameEl.textContent = c.name;
         roleEl.textContent = c.role;
         descEl.textContent = c.desc;
         imgEl.src = c.img;
-        gsap.fromTo([imgEl, descEl], { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' });
+
+        /* one-shot glitch burst on switch */
+        imgEl.style.animation = 'none';
+        void imgEl.offsetWidth; /* reset */
+        imgEl.style.animation = 'char-burst .45s steps(6) 1, char-glitch-loop 6s linear infinite';
+
+        gsap.fromTo([imgEl, descEl, nameEl, roleEl], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' });
       }});
     }
     showCharacter(index);
