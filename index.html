@@ -14,8 +14,7 @@
     body { font-family: 'Unbounded', sans-serif; background: #0b0710; color: #eee; overflow-x: hidden; }
 
     /* Preloader */
-    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 1000; }
-    #loader-bar { width: 0; height: 4px; background: #a47aff; transition: width 1s ease; }
+    
 
     /* Hero Section */
     #hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden; }
@@ -45,8 +44,8 @@
     .trailer-section iframe { width: 80%; height: 60vh; border: 3px solid #a47aff; border-radius: 10px; box-shadow: 0 0 30px #4b2a7d; }
 
     /* Scroll-in text */
-    .reveal { opacity: 0; transform: translateX(-80px); }
-    .reveal-right { opacity: 0; transform: translateX(80px); }
+    .reveal { opacity: 0; transform: translateX(-80px); text-shadow: 0 0 0 rgba(207,174,255,0.35); transition: text-shadow 1s ease-out; }
+    .reveal-right { opacity: 0; transform: translateX(80px); text-shadow: 0 0 0 rgba(207,174,255,0.35); transition: text-shadow 1s ease-out; }
 
     /* Story Gallery */
     .story-gallery { display: flex; gap: 1.5rem; margin-top: 2rem; }
@@ -95,8 +94,6 @@
 .character-card .nebula { display:none; }
 
 .character-card:hover img {
-  animation: small-glitch 0.45s steps(6) 1;
-} {
   animation: small-glitch 0.45s steps(6) 1;
 }
     .nav-buttons { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
@@ -157,12 +154,18 @@
   0% { background-position: 50% 50%; }
   100% { background-position: 54% 46%; }
 }
+.glow-phrase { text-shadow: 0 0 0 rgba(207,174,255,0); transition: text-shadow 1.2s ease-out; }
+.glow-phrase.glow-active { text-shadow: 0 0 14px rgba(207,174,255,0.35); }
+</style>
+<style>
+/* Preloader P1 */
+#preloader{position:fixed;inset:0;background:#0b0710;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s ease;}#preloader.fade-out{opacity:0;pointer-events:none;}
+#preloader img{width:160px;opacity:.3;animation:pulse-logo 2.4s ease-in-out infinite;}@keyframes pulse-logo{0%{transform:scale(.92);opacity:.25;}50%{transform:scale(1);opacity:.6;}100%{transform:scale(.92);opacity:.25;}}
 </style>
 </head>
 <body>
-  <div id="preloader">
-    <p>Loading...</p>
-    <div id="loader-bar"></div>
+<div id="preloader"><img src="logotransp.png" alt="Loading"></div>
+  
   </div>
 
   <section id="hero"><canvas id="hero-particles"></canvas>
@@ -263,184 +266,58 @@
 
 
   <script>
-    // Preloader
-    window.addEventListener('load', () => {
-      document.getElementById('loader-bar').style.width = '100%';
-      setTimeout(() => {
-        const preloader = document.getElementById('preloader');
-        preloader.style.opacity = '0';
-        setTimeout(()=> preloader.style.display = 'none', 500);
-      }, 800);
-      gsap.to('#hero-logo', {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});, {opacity: 1, scale: 1, duration: 1.4, ease: 'power2.out'});
-    });
-
-    gsap.registerPlugin(ScrollTrigger);
-
-// Cinematic section transitions
-const sections = document.querySelectorAll('section');
-sections.forEach((sec) => {
-  gsap.from(sec, {
-    opacity: 0,
-    y: 40,
-    duration: 0.6,
-    ease: 'power2.out',
-    scrollTrigger: {
-      trigger: sec,
-      start: 'top 85%'
-    }
-  });
+// ✅ Preloader
+window.addEventListener('load',()=>{
+ const p=document.getElementById('preloader');
+ setTimeout(()=>p.classList.add('fade-out'),250);
 });
 
-    gsap.utils.toArray('.reveal').forEach(el => {
-      gsap.fromTo(el, {opacity:0, x:-80}, {opacity:1, x:0, duration:1.2, scrollTrigger:{trigger:el, start:'top 80%'}});
-    });
+// ✅ Hero Logo Intro
+window.addEventListener('load',()=>{
+ gsap.to('#hero-logo',{opacity:1,scale:1,duration:1.4,ease:'power2.out'});
+});
 
-    gsap.utils.toArray('.reveal-right').forEach(el => {
-      gsap.fromTo(el, {opacity:0, x:80}, {opacity:1, x:0, duration:1.2, scrollTrigger:{trigger:el, start:'top 80%'}});
-    });
+gsap.registerPlugin(ScrollTrigger);
 
-    // Carousel
-    let index = 0;
-    const characters = [
-  {
-    name: 'Yunis Caelum',
-    role: 'The Light of Humanity',
-    img: 'yunissilouhette.png',
-    desc: 'A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies a quiet weight — one he refuses to let break those he protects.'
-  },
-  {
-    name: 'Estella Kisiel',
-    role: 'The Visionary',
-    img: 'estellasilouhette.png',
-    desc: 'Brilliant, calculating, and always five steps ahead. Estella’s insight guides the Scions through paths unseen, her history with Yunis deepening the weight of every choice made.'
-  },
-  {
-    name: 'Angie Alfaro',
-    role: 'The Ember Soul',
-    img: 'angiesilouhette.png',
-    desc: 'Warm-hearted and unwavering, Angie carries the spark that prevents the Scions from breaking. A master of firearms whose optimism burns brighter than the darkness around them.'
-  },
-  {
-    name: 'Rictor Fitzsimmons',
-    role: 'The Iron Heart of Cinceria',
-    img: 'rictorsilouhette.png',
-    desc: 'Forged through hardship and tempered through loyalty. Rictor’s strength shields his friends, but it is his compassion that binds them together when hope begins to fracture.'
-  }
+gsap.utils.toArray('section').forEach(sec=>{
+ gsap.from(sec,{opacity:0,y:40,duration:.6,ease:'power2.out',scrollTrigger:{trigger:sec,start:'top 85%'}});
+});
+
+gsap.utils.toArray('.reveal').forEach(el=>{
+ gsap.fromTo(el,{opacity:0,x:-80},{opacity:1,x:0,duration:1.1,scrollTrigger:{trigger:el,start:'top 80%'}});
+});
+
+gsap.utils.toArray('.reveal-right').forEach(el=>{
+ gsap.fromTo(el,{opacity:0,x:80},{opacity:1,x:0,duration:1.1,scrollTrigger:{trigger:el,start:'top 80%'}});
+});
+
+// ✅ Character Switcher
+let index=0;
+const characters=[
+ {name:'Yunis Caelum',role:'The Light of Humanity',img:'yunissilouhette.png',desc:'A calm and collected leader whose confidence holds the Scions together. Yet beneath his steady exterior lies a quiet weight — one he refuses to let break those he protects.'},
+ {name:'Estella Kisiel',role:'The Visionary',img:'estellasilouhette.png',desc:'Brilliant, calculating, and always five steps ahead. Estella’s insight guides the Scions through paths unseen, her history with Yunis deepening the weight of every choice made.'},
+ {name:'Angie Alfaro',role:'The Ember Soul',img:'angiesilouhette.png',desc:'Warm-hearted and unwavering, Angie carries the spark that prevents the Scions from breaking. A master of firearms whose optimism burns brighter than the darkness around them.'},
+ {name:'Rictor Fitzsimmons',role:'The Iron Heart of Cinceria',img:'rictorsilouhette.png',desc:'Forged through hardship and tempered through loyalty. Rictor’s strength shields his friends, but it is his compassion that binds them together when hope begins to fracture.'}
 ];
+const nameEl=document.getElementById('charName');
+const roleEl=document.getElementById('charRole');
+const descEl=document.getElementById('charDesc');
+const imgEl=document.getElementById('charSilhouette');
 
-let index = 0;
-const nameEl = document.getElementById('charName');
-const roleEl = document.getElementById('charRole');
-const descEl = document.getElementById('charDesc');
-const imgEl = document.getElementById('charSilhouette');
-
-function showCharacter(i){
-  const c = characters[i];
-  gsap.to([imgEl, descEl], {opacity:0, y:20, duration:0.35, onComplete:()=>{
-    nameEl.textContent = c.name;
-    roleEl.textContent = c.role;
-    descEl.textContent = c.desc;
-    imgEl.src = c.img;
-    gsap.fromTo([imgEl, descEl], {opacity:0, y:20}, {opacity:1, y:0, duration:0.6, ease:'power2.out'});
-  }});
-}
-
+function showCharacter(i){const c=characters[i];gsap.to([imgEl,descEl],{opacity:0,y:10,duration:.2,onComplete:()=>{nameEl.textContent=c.name;roleEl.textContent=c.role;descEl.textContent=c.desc;imgEl.src=c.img;gsap.fromTo([imgEl,descEl],{opacity:0,y:20},{opacity:1,y:0,duration:.45,ease:'power2.out'});}});}
 showCharacter(index);
 
-document.getElementById('charNext').onclick = () => {
-  index = (index + 1) % characters.length;
-  showCharacter(index);
-};
+document.getElementById('charNext').onclick=()=>{index=(index+1)%characters.length;showCharacter(index);} 
 
-document.getElementById('charPrev').onclick = () => {
-  index = (index - 1 + characters.length) % characters.length;
-  showCharacter(index);
-};() {
-  cards.forEach((c,i)=> c.classList.toggle('active', i === index));
-}
-updateActiveCard();
-    document.getElementById('next').addEventListener('click', () => {
-      index = (index + 1) % cards.length;
-      carousel.style.transform = `translateX(-${index * 100}%)`; updateActiveCard() = `translateX(-${index * 100}%)`;
-    });
-    document.getElementById('prev').addEventListener('click', () => {
-      index = (index - 1 + cards.length) % cards.length;
-      carousel.style.transform = `translateX(-${index * 100}%)`; updateActiveCard() = `translateX(-${index * 100}%)`;
-    });
-  </script>
-<audio id="glitch-sfx" src="glitch.mp3" preload="auto"></audio>
-<script>
-const logo = document.getElementById('hero-logo');
-const glitchAudio = document.getElementById('glitch-sfx');
-setInterval(() => {
-  if (Math.random() < 0.18) {
-    logo.classList.add('glitch-burst');
-    if(glitchAudio) glitchAudio.play().catch(()=>{});
-    setTimeout(() => logo.classList.remove('glitch-burst'), 450);
-  }
-}, 1800);
+document.getElementById('charPrev').onclick=()=>{index=(index-1+characters.length)%characters.length;showCharacter(index);} 
 
-// Hero particle field
-const hcanvas = document.getElementById('hero-particles');
-const hctx = hcanvas.getContext('2d');
-let hw, hh, hparticles;
-function hresize(){ hw=hcanvas.width=window.innerWidth; hh=hcanvas.height=window.innerHeight; hparticles=Array.from({length:40},()=>({x:Math.random()*hw,y:Math.random()*hh,s:Math.random()*2+1,dx:(Math.random()-0.5)*0.2,dy:(Math.random()-0.5)*0.2,o:Math.random()*0.5+0.2})); }
-function hanim(){ hctx.clearRect(0,0,hw,hh); hparticles.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>hw)p.dx*=-1;if(p.y<0||p.y>hh)p.dy*=-1;hctx.beginPath();hctx.arc(p.x,p.y,p.s,0,Math.PI*2);hctx.fillStyle=`rgba(164,122,255,${p.o})`;hctx.fill();});requestAnimationFrame(hanim);}window.addEventListener('resize',hresize);hresize();hanim();
-// Rising lavender dust particles inside character panel
-(function(){
-  const canvas = document.getElementById('charParticles');
-  const ctx = canvas.getContext('2d');
-  const panel = canvas.parentElement; // char-panel
-  let w=0,h=0, particles=[];
-  function resize(){
-    const r = panel.getBoundingClientRect();
-    w = canvas.width = Math.floor(r.width);
-    h = canvas.height = Math.floor(r.height);
-    particles = Array.from({length: 38}, ()=>({
-      x: Math.random()*w,
-      y: Math.random()*h,
-      r: Math.random()*2.2 + 0.6,
-      s: Math.random()*0.25 + 0.08,
-      a: Math.random()*0.3 + 0.25
-    }));
-  }
-  function tick(){
-    ctx.clearRect(0,0,w,h);
-    particles.forEach(p=>{
-      p.y -= p.s;
-      p.x += (Math.sin((p.y+p.x)*0.002))*0.15; // gentle sway
-      if(p.y < -10){ p.y = h + Math.random()*20; p.x = Math.random()*w; }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(207,174,255,${p.a})`;
-      ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(164,122,255,0.55)';
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    });
-    requestAnimationFrame(tick);
-  }
-  window.addEventListener('resize', resize);
-  resize(); tick();
-})();
-
-// Ambient audio toggle logic
-(function(){
-  const btn = document.getElementById('audioToggle');
-  const audio = document.getElementById('ambience');
-  const on = document.getElementById('icon-sound-on');
-  const off = document.getElementById('icon-sound-off');
-  let enabled = false;
-  function setIcons(){ on.style.display = enabled ? 'block' : 'none'; off.style.display = enabled ? 'none' : 'block'; }
-  setIcons();
-  btn.addEventListener('click', async ()=>{
-    enabled = !enabled; setIcons();
-    try{
-      if(enabled){ audio.volume = 0; if(audio.paused) await audio.play(); gsap.to(audio, {volume:0.12, duration:1.5, ease:'power2.out'}); }
-      else { gsap.to(audio, {volume:0, duration:0.9, onComplete:()=>audio.pause()}); }
-    }catch(e){ enabled=false; setIcons(); }
-  });
-})();
-
+// ✅ Ambient Audio Autoplay (plays after first interaction)
+const audio=document.getElementById('ambience');
+let audioStarted=false;
+function startAudio(){ if(!audioStarted){ audioStarted=true; audio.volume=0; audio.play().then(()=>{ gsap.to(audio,{volume:.12,duration:2}); }).catch(()=>{}); }}
+['click','scroll','keydown','mousemove','touchstart'].forEach(ev=>{
+  window.addEventListener(ev,startAudio,{once:true});
+});
 </script>
 </body>
 </html>
