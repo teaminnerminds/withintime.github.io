@@ -37,6 +37,24 @@
     }
     #hero img { width: 45vmin; position: relative; z-index: 3; opacity: 0; transform: scale(0.85); }
 
+    /* Preloader Hide Fix */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #0b0710;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.6s ease-out;
+}
+
+#preloader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
     /* Sections */
     section { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 3rem 1rem; position: relative; overflow: hidden; }
     h2 { color: #d7c4ff; margin-bottom: 1.5rem; font-size: 2rem; }
