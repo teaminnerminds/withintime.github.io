@@ -60,10 +60,10 @@
     #preloader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;}
     #tagline-text { font-size: clamp(2rem, 6vw, 5rem); font-weight: 900; color: var(--within-purple); letter-spacing: 4px; text-transform: uppercase; position: absolute; text-align: center; opacity: 0; text-shadow: 0 0 30px rgba(164, 122, 255, 0.5);}
     #signature-box { display: flex; flex-direction: column; align-items: center; gap: 20px; opacity: 0; position: absolute; }
-    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; text-transform: uppercase; letter-spacing: 2px;}
+    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
     
     /* The Drawing Pad */
-    #signature-pad { background: rgba(20, 15, 30, 0.8); border: 2px solid var(--within-purple); border-radius: 8px; cursor: crosshair; box-shadow: 0 0 20px rgba(164, 122, 255, 0.1); touch-action: none; }
+    #signature-pad { background: rgba(20, 15, 30, 0.8); border: 2px solid var(--within-purple); border-radius: 8px; cursor: crosshair; box-shadow: 0 0 20px rgba(164, 122, 255, 0.1); touch-action: none; max-width: 90vw; }
     .btn-container { display: flex; gap: 15px; }
     
     .action-btn { background: var(--within-purple); color: black; border: none; padding: 12px 25px; font-family: 'Unbounded'; font-weight: 900; cursor: pointer; transform: skewX(-15deg); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
@@ -84,12 +84,10 @@
     .dynamic-gallery {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
-        /* Removed fixed row height so images determine the size naturally */
         gap: 20px;
         margin-top: 40px;
     }
     
-    /* Using equal spans ensures horizontal rows are perfectly identical in height */
     .span-6 { grid-column: span 6; }
     .span-4 { grid-column: span 4; }
 
@@ -105,7 +103,7 @@
     .gallery-item img {
         display: block;
         width: 100%;
-        height: auto; /* This forces the natural resolution with NO squeezing/empty space */
+        height: auto; 
         transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         opacity: 0.9;
     }
@@ -205,6 +203,10 @@
         .dynamic-gallery { grid-template-columns: 1fr; }
         .span-6, .span-4 { grid-column: span 1; }
         .contract-document { padding: 2rem; }
+        
+        /* Mobile Spacing Fixes */
+        section { padding: 10vh 5vw; } 
+        .content-box { padding: 1.5rem; } 
     }
   </style>
 </head>
@@ -436,10 +438,21 @@
 
     function getCoordinates(e) {
         const rect = canvas.getBoundingClientRect();
+        
+        // Calculate the scale to fix drawing offset on mobile screens
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
         if(e.touches && e.touches.length > 0) {
-            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            return { 
+                x: (e.touches[0].clientX - rect.left) * scaleX, 
+                y: (e.touches[0].clientY - rect.top) * scaleY 
+            };
         }
-        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        return { 
+            x: (e.clientX - rect.left) * scaleX, 
+            y: (e.clientY - rect.top) * scaleY 
+        };
     }
 
     function startDrawing(e) {
