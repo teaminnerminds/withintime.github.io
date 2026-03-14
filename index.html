@@ -56,15 +56,20 @@
     }
     .nav-dot:hover .nav-label { opacity: 1; transform: translateY(-50%) translateX(-10px); }
 
-    /* --- NEW: Interactive Preloader --- */
+    /* Interactive Preloader */
     #preloader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;}
     #tagline-text { font-size: clamp(2rem, 6vw, 5rem); font-weight: 900; color: var(--within-purple); letter-spacing: 4px; text-transform: uppercase; position: absolute; text-align: center; opacity: 0; text-shadow: 0 0 30px rgba(164, 122, 255, 0.5);}
     #signature-box { display: flex; flex-direction: column; align-items: center; gap: 20px; opacity: 0; position: absolute; }
-    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; }
-    #fate-input { background: transparent; border: none; border-bottom: 2px solid var(--within-purple); color: white; font-family: 'Unbounded'; font-size: 1.5rem; text-align: center; padding: 10px; outline: none; transition: 0.3s; width: 300px;}
-    #fate-input:focus { border-bottom: 2px solid #fff; box-shadow: 0 10px 20px -10px var(--within-purple); }
-    #seal-btn { background: var(--within-purple); color: black; border: none; padding: 15px 30px; font-family: 'Unbounded'; font-weight: 900; cursor: pointer; transform: skewX(-15deg); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
-    #seal-btn:hover { background: #fff; box-shadow: 0 0 30px var(--within-purple); transform: skewX(-15deg) scale(1.05); }
+    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; text-transform: uppercase; letter-spacing: 2px;}
+    
+    /* The Drawing Pad */
+    #signature-pad { background: rgba(20, 15, 30, 0.8); border: 2px solid var(--within-purple); border-radius: 8px; cursor: crosshair; box-shadow: 0 0 20px rgba(164, 122, 255, 0.1); touch-action: none; }
+    .btn-container { display: flex; gap: 15px; }
+    
+    .action-btn { background: var(--within-purple); color: black; border: none; padding: 12px 25px; font-family: 'Unbounded'; font-weight: 900; cursor: pointer; transform: skewX(-15deg); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
+    .action-btn:hover { background: #fff; box-shadow: 0 0 30px var(--within-purple); transform: skewX(-15deg) scale(1.05); }
+    .clear-btn { background: transparent; color: white; border: 1px solid white; box-shadow: none;}
+    .clear-btn:hover { background: rgba(255,255,255,0.1); color: white; box-shadow: none; }
 
     /* Sections */
     section { padding: 12vh 10vw; position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
@@ -91,23 +96,17 @@
     .char-controls button { background: transparent; color: white; border: 1px solid white; padding: 12px 25px; cursor: pointer; font-family: 'Unbounded'; font-weight: 600; transition: 0.3s; }
     .char-controls button:hover { background: white; color: black; }
 
-    /* --- NEW: Signed Fates Board --- */
-    #fates-board { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 2rem; max-height: 50vh; overflow-y: auto; padding-right: 15px; }
-    #fates-board::-webkit-scrollbar { width: 8px; }
-    #fates-board::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-    #fates-board::-webkit-scrollbar-thumb { background: var(--within-purple); border-radius: 4px; }
-    .fate-signature { background: rgba(164, 122, 255, 0.05); border: 1px solid var(--glass-border); padding: 10px 20px; font-family: 'Unbounded'; font-style: italic; color: rgba(255,255,255,0.7); animation: glowIn 1s ease forwards;}
-    
-    @keyframes glowIn {
-        0% { opacity: 0; box-shadow: 0 0 0 var(--within-purple); transform: scale(0.9); }
-        50% { box-shadow: 0 0 20px var(--within-purple); color: #fff; }
-        100% { opacity: 1; box-shadow: 0 0 0 var(--within-purple); transform: scale(1); }
-    }
-
-    /* --- NEW: Socials Section --- */
+    /* Socials Section */
     .social-links { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 2rem;}
     .social-btn { display: flex; align-items: center; gap: 15px; background: rgba(20, 15, 30, 0.8); border: 1px solid var(--glass-border); padding: 20px 40px; color: white; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; }
     .social-btn:hover { background: var(--within-purple); color: black; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(164,122,255,0.3); border-color: var(--within-purple); }
+
+    /* --- THE CONTRACT SECTION --- */
+    #contract { align-items: center; text-align: center; background: radial-gradient(circle at center, rgba(164,122,255,0.05) 0%, transparent 70%); }
+    .contract-document { border: 1px solid var(--glass-border); padding: 4rem; max-width: 800px; background: rgba(5, 2, 8, 0.8); position: relative;}
+    .contract-document::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background: var(--within-purple); }
+    .final-signature-container { margin-top: 3rem; border-bottom: 2px dashed rgba(255,255,255,0.3); display: inline-block; padding: 10px 40px; min-width: 300px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+    #final-signature-image { max-width: 100%; max-height: 100px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
 
     /* Buttons */
     .steam-cta { background: var(--within-purple); color: black; padding: 2rem 4rem; display: inline-block; font-weight: 900; text-decoration: none; transform: skewX(-15deg); transition: 0.4s; }
@@ -117,6 +116,7 @@
         .lunar-nav { display: none; }
         #characters-section { grid-template-columns: 1fr; text-align: center; }
         .gallery-grid { grid-template-columns: 1fr; }
+        .contract-document { padding: 2rem; }
     }
   </style>
 </head>
@@ -126,8 +126,11 @@
     <div id="tagline-text">FATE CHANGES FOR NO ONE</div>
     <div id="signature-box">
         <h2>Sign your fate</h2>
-        <input type="text" id="fate-input" placeholder="Your Name" autocomplete="off" maxlength="20" />
-        <button id="seal-btn">Seal Fate</button>
+        <canvas id="signature-pad" width="400" height="150"></canvas>
+        <div class="btn-container">
+            <button id="clear-btn" class="action-btn clear-btn">Clear</button>
+            <button id="seal-btn" class="action-btn">Seal Fate</button>
+        </div>
     </div>
   </div>
 
@@ -137,9 +140,8 @@
       <div class="nav-dot" onclick="scrollToSection('story')"><span class="nav-label">Prophecy</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
       <div class="nav-dot" onclick="scrollToSection('gameplay')"><span class="nav-label">Mechanics</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
       <div class="nav-dot" onclick="scrollToSection('characters')"><span class="nav-label">Scions</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('signed-fates')"><span class="nav-label">Sealed Fates</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
       <div class="nav-dot" onclick="scrollToSection('socials')"><span class="nav-label">Network</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('steam')"><span class="nav-label">Eternal</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('contract')"><span class="nav-label">The Pact</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
   </nav>
 
   <canvas id="starfield"></canvas>
@@ -212,17 +214,6 @@
     </div>
   </section>
 
-  <section id="signed-fates">
-      <h2 class="reveal-scale">The Sealed Fates</h2>
-      <p class="reveal-slide-up" style="color: rgba(255,255,255,0.7); max-width: 600px;">Those who have accepted the prophecy. Their destinies are now intertwined with Iolade.</p>
-      
-      <div id="fates-board" class="reveal-slide-up">
-          <div class="fate-signature">Estella K.</div>
-          <div class="fate-signature">Rictor F.</div>
-          <div class="fate-signature">Angie A.</div>
-      </div>
-  </section>
-
   <section id="socials" style="align-items: center; text-align: center;">
       <h2 class="reveal-scale">Join the Network</h2>
       <p class="reveal-slide-up">Stay updated on the prophecy.</p>
@@ -233,8 +224,20 @@
       </div>
   </section>
 
+  <section id="contract">
+      <div class="contract-document reveal-scale">
+          <h2 style="font-size: 2.5rem; color: #fff;">The Pact is Sealed</h2>
+          <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.8;">
+              By the mark below, you have intertwined your destiny with the world of Iolade. The Scions of Fate acknowledge your presence. There is no turning back.
+          </p>
+          <div class="final-signature-container">
+              <img id="final-signature-image" src="" alt="Your Sealed Fate" />
+          </div>
+      </div>
+  </section>
+
   <section id="steam" style="text-align: center; align-items: center;">
-    <h2 class="reveal-scale">RECLAIM YOUR FUTURE</h2>
+    <h2 class="reveal-slide-up">RECLAIM YOUR FUTURE</h2>
     <div class="reveal-slide-up">
         <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="steam-cta">AVAILABLE ON STEAM</a>
     </div>
@@ -246,61 +249,105 @@
   <script>
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-    // --- NEW INTRO SEQUENCE LOGIC ---
-    // Basic profanity filter array (add more as needed)
-    const blockedWords = ["badword1", "badword2", "spam", "test"]; 
+    // --- CANVAS DRAWING LOGIC ---
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let hasDrawn = false; // To check if they actually signed
 
+    // Setup brush style
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    // Helper to get coordinates for both mouse and touch
+    function getCoordinates(e) {
+        const rect = canvas.getBoundingClientRect();
+        if(e.touches && e.touches.length > 0) {
+            return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+        }
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function startDrawing(e) {
+        isDrawing = true;
+        hasDrawn = true;
+        const coords = getCoordinates(e);
+        ctx.beginPath();
+        ctx.moveTo(coords.x, coords.y);
+        e.preventDefault(); // Prevent scrolling on mobile while drawing
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        const coords = getCoordinates(e);
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+        e.preventDefault();
+    }
+
+    function stopDrawing() {
+        if (isDrawing) {
+            ctx.closePath();
+            isDrawing = false;
+        }
+    }
+
+    // Mouse Events
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    // Touch Events for Mobile
+    canvas.addEventListener('touchstart', startDrawing, {passive: false});
+    canvas.addEventListener('touchmove', draw, {passive: false});
+    canvas.addEventListener('touchend', stopDrawing);
+
+    // Clear Button Logic
+    document.getElementById('clear-btn').addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hasDrawn = false;
+    });
+
+    // --- INTRO SEQUENCE LOGIC ---
     const tl = gsap.timeline();
 
-    // 1. Tagline slides in and out
     tl.fromTo("#tagline-text", 
         { x: "-100vw", opacity: 0 }, 
         { x: "0", opacity: 1, duration: 1.5, ease: "expo.out" }
     )
     .to("#tagline-text", { x: "100vw", opacity: 0, duration: 1, ease: "expo.in", delay: 1.5 })
-    
-    // 2. Signature box appears
     .fromTo("#signature-box", 
         { y: 50, opacity: 0 }, 
         { y: 0, opacity: 1, duration: 1, ease: "back.out(1.7)" }
     );
 
-    // 3. Handle Fate Submission
+    // --- SEAL FATE SUBMISSION ---
     document.getElementById('seal-btn').addEventListener('click', () => {
-        let name = document.getElementById('fate-input').value.trim();
-        
-        // Validation & Filtering
-        if(name === "") return;
-        const isClean = !blockedWords.some(word => name.toLowerCase().includes(word));
-        if(!isClean) {
-            alert("The astral planes reject this name.");
-            return;
+        if(!hasDrawn) {
+            // Optional: Shake the canvas to tell them to sign
+            gsap.fromTo(canvas, {x: -10}, {x: 10, duration: 0.1, yoyo: true, repeat: 3, onComplete: () => gsap.set(canvas, {x:0})});
+            return; 
         }
 
-        // Add to board
-        const board = document.getElementById('fates-board');
-        const newSig = document.createElement('div');
-        newSig.className = 'fate-signature';
-        newSig.innerText = name;
-        // Insert at the beginning
-        board.insertBefore(newSig, board.firstChild);
+        // 1. Capture the drawing as an image URL
+        const signatureDataURL = canvas.toDataURL("image/png");
+        
+        // 2. Set the image source in the contract section at the bottom
+        document.getElementById('final-signature-image').src = signatureDataURL;
 
-        // Transition out of preloader
+        // 3. Fade out the preloader
         gsap.to("#preloader", {
             opacity: 0, 
             duration: 1.5, 
             ease: "power2.inOut",
             onComplete: () => {
                 document.getElementById('preloader').style.display = 'none';
-                // Trigger hero logo pop-in once preloader is gone
                 gsap.from("#hero-logo", { scale: 0.8, opacity: 0, duration: 2, ease: "elastic.out(1, 0.3)" });
             }
         });
-    });
-
-    // Optional: allow pressing Enter to submit
-    document.getElementById('fate-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') { document.getElementById('seal-btn').click(); }
     });
 
 
@@ -309,7 +356,7 @@
         gsap.to(window, { duration: 1.2, scrollTo: "#" + id, ease: "power4.inOut" });
     }
 
-    const sections = ['hero', 'trailer', 'story', 'gameplay', 'characters', 'signed-fates', 'socials', 'steam'];
+    const sections = ['hero', 'trailer', 'story', 'gameplay', 'characters', 'socials', 'contract'];
     sections.forEach((section, index) => {
         ScrollTrigger.create({
             trigger: "#" + section, start: "top center", end: "bottom center",
@@ -341,7 +388,6 @@
       gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, scale: 0.9, opacity: 0, duration: 1, ease: "back.out(1.5)" });
     });
 
-    // Staggered reveals for grids (images, tags, buttons)
     const grids = document.querySelectorAll('.gallery-grid, .features-grid, .social-links');
     grids.forEach(grid => {
         const items = grid.querySelectorAll('.reveal-stagger');
@@ -351,8 +397,7 @@
         });
     });
 
-
-    // --- CHARACTER LOGIC (Unchanged, just repositioned) ---
+    // --- CHARACTER LOGIC ---
     const characters = [
       { name: 'Yunis Caelum', role: 'The Light of Humanity - VA: AnimilkyVA', img: 'yunissilouhette.png', desc: 'YUNIS is the leader of the Scions of Fate, he is a stellar leader due to his chill, yet cautious attitude. he always seems to have good control over everything he does.. however, isn’t that way all the time.' },
       { name: 'Estella Kisiel', role: 'The Visionary - VA: Miss Emilie', img: 'estellasilouhette.png', desc: 'ESTELLA is the brains of the Scions of Fate. Her intellect is far above the rest of her friends, She has been close friends with ---- and YUNIS since primary school having had a deep connection with the two progressing all the way into their teenage years.' },
@@ -374,17 +419,17 @@
     document.getElementById('charNext').onclick = () => { charIndex = (charIndex + 1) % characters.length; updateChar(charIndex); };
     document.getElementById('charPrev').onclick = () => { charIndex = (charIndex - 1 + characters.length) % characters.length; updateChar(charIndex); };
 
-    // --- STARFIELD (Unchanged) ---
-    const canvas = document.getElementById('starfield');
-    const ctx = canvas.getContext('2d');
+    // --- STARFIELD ---
+    const bgCanvas = document.getElementById('starfield');
+    const bgCtx = bgCanvas.getContext('2d');
     let stars = [];
     function initStars() {
-      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-      stars = Array.from({length: 120}, () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5, speed: Math.random() * 0.4 }));
+      bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
+      stars = Array.from({length: 120}, () => ({ x: Math.random() * bgCanvas.width, y: Math.random() * bgCanvas.height, size: Math.random() * 1.5, speed: Math.random() * 0.4 }));
     }
     function animateStars() {
-      ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "rgba(164,122,255,0.6)";
-      stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = canvas.height; ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill(); });
+      bgCtx.clearRect(0,0,bgCanvas.width, bgCanvas.height); bgCtx.fillStyle = "rgba(164,122,255,0.6)";
+      stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = bgCanvas.height; bgCtx.beginPath(); bgCtx.arc(s.x, s.y, s.size, 0, Math.PI*2); bgCtx.fill(); });
       requestAnimationFrame(animateStars);
     }
     initStars(); animateStars();
