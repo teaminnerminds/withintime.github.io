@@ -41,44 +41,38 @@
     /* Lunar Navigation */
     .lunar-nav {
         position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
-        display: flex; flex-direction: column; align-items: center; gap: 25px;
+        display: flex; flex-direction: column; align-items: center; gap: 20px;
         z-index: 1000;
     }
-    .nav-dot { width: 28px; height: 28px; cursor: pointer; position: relative; }
+    .nav-dot { width: 24px; height: 24px; cursor: pointer; position: relative; }
     .nav-dot svg { width: 100%; height: 100%; fill: rgba(255,255,255,0.15); transition: 0.3s; }
     .nav-dot:hover svg { fill: var(--within-purple); }
     .nav-dot.active svg { fill: var(--within-purple); filter: drop-shadow(0 0 8px var(--within-purple)); }
     .nav-label {
-        position: absolute; right: 45px; top: 50%; transform: translateY(-50%);
+        position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
         font-size: 0.65rem; font-weight: 900; color: var(--within-purple);
         white-space: nowrap; opacity: 0; transition: 0.3s; pointer-events: none;
         text-transform: uppercase; letter-spacing: 2px;
     }
     .nav-dot:hover .nav-label { opacity: 1; transform: translateY(-50%) translateX(-10px); }
 
-    /* Preloader */
-    #preloader { position: fixed; inset: 0; background: var(--bg-dark); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-    #preloader.fade-out { opacity: 0; pointer-events: none; transition: 0.8s ease; }
+    /* --- NEW: Interactive Preloader --- */
+    #preloader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;}
+    #tagline-text { font-size: clamp(2rem, 6vw, 5rem); font-weight: 900; color: var(--within-purple); letter-spacing: 4px; text-transform: uppercase; position: absolute; text-align: center; opacity: 0; text-shadow: 0 0 30px rgba(164, 122, 255, 0.5);}
+    #signature-box { display: flex; flex-direction: column; align-items: center; gap: 20px; opacity: 0; position: absolute; }
+    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; }
+    #fate-input { background: transparent; border: none; border-bottom: 2px solid var(--within-purple); color: white; font-family: 'Unbounded'; font-size: 1.5rem; text-align: center; padding: 10px; outline: none; transition: 0.3s; width: 300px;}
+    #fate-input:focus { border-bottom: 2px solid #fff; box-shadow: 0 10px 20px -10px var(--within-purple); }
+    #seal-btn { background: var(--within-purple); color: black; border: none; padding: 15px 30px; font-family: 'Unbounded'; font-weight: 900; cursor: pointer; transform: skewX(-15deg); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
+    #seal-btn:hover { background: #fff; box-shadow: 0 0 30px var(--within-purple); transform: skewX(-15deg) scale(1.05); }
 
     /* Sections */
     section { padding: 12vh 10vw; position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
     h2 { font-weight: 900; font-size: clamp(2.2rem, 5vw, 4.5rem); text-transform: uppercase; margin-bottom: 2.5rem; letter-spacing: -2px; }
     
-    /* Hero with Smoother Transition */
     #hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .hero-bg { 
-      position: absolute; inset: 0; 
-      background: url('bigimageforweb.png') center/cover; 
-      filter: brightness(0.5); 
-      z-index: -1;
-    }
-    /* The Soft Fade Layer */
-    .hero-fade {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, var(--bg-dark) 95%);
-      z-index: 0;
-    }
+    .hero-bg { position: absolute; inset: 0; background: url('bigimageforweb.png') center/cover; filter: brightness(0.5); z-index: -1; }
+    .hero-fade { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--bg-dark) 95%); z-index: 0; }
 
     /* Layout Containers */
     .content-box { background: rgba(20, 15, 30, 0.6); border-left: 5px solid var(--within-purple); padding: 3.5rem; backdrop-filter: blur(12px); max-width: 950px; line-height: 1.8; }
@@ -88,7 +82,7 @@
 
     /* Gameplay Features */
     .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-    .feature-tag { background: rgba(164, 122, 255, 0.1); border: 1px solid var(--glass-border); padding: 15px; font-size: 0.9rem; font-weight: 600; }
+    .feature-tag { background: rgba(164, 122, 255, 0.1); border: 1px solid var(--glass-border); padding: 15px; font-size: 0.9rem; font-weight: 600; text-align: center;}
 
     /* Characters */
     #characters-section { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; }
@@ -96,6 +90,24 @@
     #charSilhouette { width: 100%; max-height: 80vh; object-fit: contain; filter: drop-shadow(0 0 30px var(--within-purple)); }
     .char-controls button { background: transparent; color: white; border: 1px solid white; padding: 12px 25px; cursor: pointer; font-family: 'Unbounded'; font-weight: 600; transition: 0.3s; }
     .char-controls button:hover { background: white; color: black; }
+
+    /* --- NEW: Signed Fates Board --- */
+    #fates-board { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 2rem; max-height: 50vh; overflow-y: auto; padding-right: 15px; }
+    #fates-board::-webkit-scrollbar { width: 8px; }
+    #fates-board::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+    #fates-board::-webkit-scrollbar-thumb { background: var(--within-purple); border-radius: 4px; }
+    .fate-signature { background: rgba(164, 122, 255, 0.05); border: 1px solid var(--glass-border); padding: 10px 20px; font-family: 'Unbounded'; font-style: italic; color: rgba(255,255,255,0.7); animation: glowIn 1s ease forwards;}
+    
+    @keyframes glowIn {
+        0% { opacity: 0; box-shadow: 0 0 0 var(--within-purple); transform: scale(0.9); }
+        50% { box-shadow: 0 0 20px var(--within-purple); color: #fff; }
+        100% { opacity: 1; box-shadow: 0 0 0 var(--within-purple); transform: scale(1); }
+    }
+
+    /* --- NEW: Socials Section --- */
+    .social-links { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; margin-top: 2rem;}
+    .social-btn { display: flex; align-items: center; gap: 15px; background: rgba(20, 15, 30, 0.8); border: 1px solid var(--glass-border); padding: 20px 40px; color: white; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; }
+    .social-btn:hover { background: var(--within-purple); color: black; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(164,122,255,0.3); border-color: var(--within-purple); }
 
     /* Buttons */
     .steam-cta { background: var(--within-purple); color: black; padding: 2rem 4rem; display: inline-block; font-weight: 900; text-decoration: none; transform: skewX(-15deg); transition: 0.4s; }
@@ -110,15 +122,24 @@
 </head>
 <body>
 
-  <div id="preloader"><img src="logotransp.png" width="80"></div>
+  <div id="preloader">
+    <div id="tagline-text">FATE CHANGES FOR NO ONE</div>
+    <div id="signature-box">
+        <h2>Sign your fate</h2>
+        <input type="text" id="fate-input" placeholder="Your Name" autocomplete="off" maxlength="20" />
+        <button id="seal-btn">Seal Fate</button>
+    </div>
+  </div>
 
   <nav class="lunar-nav">
-      <div class="nav-dot active" onclick="scrollToSection('hero')"><span class="nav-label">Arrival</span><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('trailer')"><span class="nav-label">Visions</span><svg viewBox="0 0 24 24"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm-2 15l6-5-6-5v10z"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('story')"><span class="nav-label">Prophecy</span><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('gameplay')"><span class="nav-label">Mechanics</span><svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('characters')"><span class="nav-label">Scions</span><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-4.41 3.59-8 8-8s8 3.59 8 8c0 4.41-3.59 8-8 8z"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('steam')"><span class="nav-label">Eternal</span><svg viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"/></svg></div>
+      <div class="nav-dot active" onclick="scrollToSection('hero')"><span class="nav-label">Arrival</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('trailer')"><span class="nav-label">Visions</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('story')"><span class="nav-label">Prophecy</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('gameplay')"><span class="nav-label">Mechanics</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('characters')"><span class="nav-label">Scions</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('signed-fates')"><span class="nav-label">Sealed Fates</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('socials')"><span class="nav-label">Network</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+      <div class="nav-dot" onclick="scrollToSection('steam')"><span class="nav-label">Eternal</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
   </nav>
 
   <canvas id="starfield"></canvas>
@@ -131,53 +152,53 @@
   </section>
 
   <section id="trailer" style="align-items: center;">
-    <h2 class="reveal">Official Trailer</h2>
-    <div style="width: 100%; max-width: 1000px; aspect-ratio: 16/9; border: 2px solid var(--within-purple); position: relative; z-index: 2;">
+    <h2 class="reveal-scale">Official Trailer</h2>
+    <div class="reveal-slide-up" style="width: 100%; max-width: 1000px; aspect-ratio: 16/9; border: 2px solid var(--within-purple); position: relative; z-index: 2;">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/AZx1WWpc7b0" frameborder="0" allowfullscreen></iframe>
     </div>
   </section>
 
   <section id="story">
-    <h2 class="reveal">The Story</h2>
-    <div class="content-box reveal">
+    <h2 class="reveal-slide-right">The Story</h2>
+    <div class="content-box reveal-slide-right">
       <p><strong>Six months</strong> remain before the fate of two worlds is sealed and humanity as it's known ceases to exist. Yunis Caelum leads the charge to save humanity, followed closely by his ensemble of childhood friends — Estella Kisiel, Angie Alfaro, and Rictor Fitzsimmons — as they venture into <em>Iolade</em>, a world loosely connected to their own through a force unbeknownst to them.</p>
       <p style="margin-top: 1.5rem;">With hopes of gaining answers to June's unprecedented disappearance just a year prior, the unlikely group of heroes make their way through Iolade, piecing together their larger roles in this prophecy as they aim to put an end to the <strong>Scion of Time's</strong> terror and allow both Iolade and Terrus to live in peace.</p>
       <p style="margin-top: 1.5rem; font-weight: 900; color: var(--within-purple); font-size: 1.3rem; letter-spacing: 2px;">FATE CHANGES FOR NO ONE.</p>
     </div>
-    <div class="gallery-grid reveal">
-      <img src="groupdiscuss.png" alt="Group Discussion">
-      <img src="firsteterniatime.png" alt="Eternia Time">
-      <img src="gravesitepioc.jpg" alt="Gravesite">
+    <div class="gallery-grid">
+      <img src="groupdiscuss.png" alt="Group Discussion" class="reveal-stagger">
+      <img src="firsteterniatime.png" alt="Eternia Time" class="reveal-stagger">
+      <img src="gravesitepioc.jpg" alt="Gravesite" class="reveal-stagger">
     </div>
   </section>
 
   <section id="gameplay">
-    <h2 class="reveal">Gameplay & Content</h2>
-    <div class="features-grid reveal">
-        <div class="feature-tag">13 Unique Playable Characters</div>
-        <div class="feature-tag">Exclusive STANCE Combat System</div>
-        <div class="feature-tag">Explore 9 Unique Regions</div>
-        <div class="feature-tag">Fully Voiced Cutscenes & Encounters</div>
-        <div class="feature-tag">200+ Track OST by Oxiqa</div>
-        <div class="feature-tag">100+ Achievements</div>
+    <h2 class="reveal-slide-left" style="text-align: right;">Gameplay & Content</h2>
+    <div class="features-grid">
+        <div class="feature-tag reveal-stagger">13 Unique Playable Characters</div>
+        <div class="feature-tag reveal-stagger">Exclusive STANCE Combat System</div>
+        <div class="feature-tag reveal-stagger">Explore 9 Unique Regions</div>
+        <div class="feature-tag reveal-stagger">Fully Voiced Cutscenes & Encounters</div>
+        <div class="feature-tag reveal-stagger">200+ Track OST by Oxiqa</div>
+        <div class="feature-tag reveal-stagger">100+ Achievements</div>
     </div>
-    <div class="content-box reveal">
+    <div class="content-box reveal-slide-left" style="margin-left: auto; border-left: none; border-right: 5px solid var(--within-purple);">
         <p>Utilising a fully unique turn-based combat system, Within Time throws you into the world of Iolade as you fight, talk and plan your way through each advesary that dare cross your path. Picking up to four active characters to fight as in combat you'll utilise the STANCE system to navigate tough encounters and achieve victory in the toughest spots.</p>
         <p style="margin-top: 1rem;">With each of the thirteen playable characters having their own element to utilise, the possibilities for combat are near endless. Experience a wholy unique take on the turn-based RPG genre in Within Time.</p>
     </div>
-    <div class="gallery-grid reveal">
-        <img src="image.png" alt="Overworld Exploration">
-        <img src="image2.png" alt="Combat Scene, WIP.">
-        <img src="mainmenu.png" alt="Character Menu">
+    <div class="gallery-grid">
+        <img src="image.png" alt="Overworld Exploration" class="reveal-stagger">
+        <img src="image2.png" alt="Combat Scene, WIP." class="reveal-stagger">
+        <img src="mainmenu.png" alt="Character Menu" class="reveal-stagger">
     </div>
   </section>
 
   <section id="characters">
     <div id="characters-section">
-        <div class="char-visual">
+        <div class="char-visual reveal-slide-right">
             <img id="charSilhouette" src="yunissilouhette.png" />
         </div>
-        <div class="char-content">
+        <div class="char-content reveal-slide-left">
             <h2 id="charName" style="margin-bottom: 0.5rem;">Yunis Caelum</h2>
             <h3 id="charRole" style="color: var(--within-purple); margin-bottom: 2rem; font-size: 1.1rem;">Leader of the Scions of Fate - VA: AnimilkyVA</h3>
             <div class="content-box" style="padding: 2rem; border-right: 5px solid var(--within-purple); border-left: none;">
@@ -191,9 +212,30 @@
     </div>
   </section>
 
+  <section id="signed-fates">
+      <h2 class="reveal-scale">The Sealed Fates</h2>
+      <p class="reveal-slide-up" style="color: rgba(255,255,255,0.7); max-width: 600px;">Those who have accepted the prophecy. Their destinies are now intertwined with Iolade.</p>
+      
+      <div id="fates-board" class="reveal-slide-up">
+          <div class="fate-signature">Estella K.</div>
+          <div class="fate-signature">Rictor F.</div>
+          <div class="fate-signature">Angie A.</div>
+      </div>
+  </section>
+
+  <section id="socials" style="align-items: center; text-align: center;">
+      <h2 class="reveal-scale">Join the Network</h2>
+      <p class="reveal-slide-up">Stay updated on the prophecy.</p>
+      <div class="social-links">
+          <a href="#" class="social-btn reveal-stagger">Twitter / X</a>
+          <a href="#" class="social-btn reveal-stagger">Discord Server</a>
+          <a href="#" class="social-btn reveal-stagger">YouTube</a>
+      </div>
+  </section>
+
   <section id="steam" style="text-align: center; align-items: center;">
-    <h2 class="reveal">RECLAIM YOUR FUTURE</h2>
-    <div class="reveal">
+    <h2 class="reveal-scale">RECLAIM YOUR FUTURE</h2>
+    <div class="reveal-slide-up">
         <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="steam-cta">AVAILABLE ON STEAM</a>
     </div>
     <div style="margin-top: 100px; font-size: 0.8rem; color: rgba(255,255,255,0.3); letter-spacing: 2px;">
@@ -204,30 +246,113 @@
   <script>
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-    window.addEventListener('load', () => {
-      document.getElementById('preloader').classList.add('fade-out');
+    // --- NEW INTRO SEQUENCE LOGIC ---
+    // Basic profanity filter array (add more as needed)
+    const blockedWords = ["badword1", "badword2", "spam", "test"]; 
+
+    const tl = gsap.timeline();
+
+    // 1. Tagline slides in and out
+    tl.fromTo("#tagline-text", 
+        { x: "-100vw", opacity: 0 }, 
+        { x: "0", opacity: 1, duration: 1.5, ease: "expo.out" }
+    )
+    .to("#tagline-text", { x: "100vw", opacity: 0, duration: 1, ease: "expo.in", delay: 1.5 })
+    
+    // 2. Signature box appears
+    .fromTo("#signature-box", 
+        { y: 50, opacity: 0 }, 
+        { y: 0, opacity: 1, duration: 1, ease: "back.out(1.7)" }
+    );
+
+    // 3. Handle Fate Submission
+    document.getElementById('seal-btn').addEventListener('click', () => {
+        let name = document.getElementById('fate-input').value.trim();
+        
+        // Validation & Filtering
+        if(name === "") return;
+        const isClean = !blockedWords.some(word => name.toLowerCase().includes(word));
+        if(!isClean) {
+            alert("The astral planes reject this name.");
+            return;
+        }
+
+        // Add to board
+        const board = document.getElementById('fates-board');
+        const newSig = document.createElement('div');
+        newSig.className = 'fate-signature';
+        newSig.innerText = name;
+        // Insert at the beginning
+        board.insertBefore(newSig, board.firstChild);
+
+        // Transition out of preloader
+        gsap.to("#preloader", {
+            opacity: 0, 
+            duration: 1.5, 
+            ease: "power2.inOut",
+            onComplete: () => {
+                document.getElementById('preloader').style.display = 'none';
+                // Trigger hero logo pop-in once preloader is gone
+                gsap.from("#hero-logo", { scale: 0.8, opacity: 0, duration: 2, ease: "elastic.out(1, 0.3)" });
+            }
+        });
     });
 
+    // Optional: allow pressing Enter to submit
+    document.getElementById('fate-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') { document.getElementById('seal-btn').click(); }
+    });
+
+
+    // --- ENHANCED SCROLL ANIMATIONS ---
     function scrollToSection(id) {
         gsap.to(window, { duration: 1.2, scrollTo: "#" + id, ease: "power4.inOut" });
     }
 
-    const sections = ['hero', 'trailer', 'story', 'gameplay', 'characters', 'steam'];
+    const sections = ['hero', 'trailer', 'story', 'gameplay', 'characters', 'signed-fates', 'socials', 'steam'];
     sections.forEach((section, index) => {
         ScrollTrigger.create({
             trigger: "#" + section, start: "top center", end: "bottom center",
             onEnter: () => updateNav(index), onEnterBack: () => updateNav(index)
         });
     });
+
     function updateNav(index) {
         document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
-        document.querySelectorAll('.nav-dot')[index].classList.add('active');
+        if(document.querySelectorAll('.nav-dot')[index]) {
+            document.querySelectorAll('.nav-dot')[index].classList.add('active');
+        }
     }
 
-    gsap.utils.toArray('.reveal').forEach(el => {
-      gsap.from(el, { scrollTrigger: { trigger: el, start: "top 90%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" });
+    // Dynamic Animation Classes
+    gsap.utils.toArray('.reveal-slide-right').forEach(el => {
+      gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, x: -100, opacity: 0, duration: 1.2, ease: "power3.out" });
     });
 
+    gsap.utils.toArray('.reveal-slide-left').forEach(el => {
+      gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, x: 100, opacity: 0, duration: 1.2, ease: "power3.out" });
+    });
+
+    gsap.utils.toArray('.reveal-slide-up').forEach(el => {
+      gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" });
+    });
+
+    gsap.utils.toArray('.reveal-scale').forEach(el => {
+      gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, scale: 0.9, opacity: 0, duration: 1, ease: "back.out(1.5)" });
+    });
+
+    // Staggered reveals for grids (images, tags, buttons)
+    const grids = document.querySelectorAll('.gallery-grid, .features-grid, .social-links');
+    grids.forEach(grid => {
+        const items = grid.querySelectorAll('.reveal-stagger');
+        gsap.from(items, {
+            scrollTrigger: { trigger: grid, start: "top 85%" },
+            y: 40, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power3.out"
+        });
+    });
+
+
+    // --- CHARACTER LOGIC (Unchanged, just repositioned) ---
     const characters = [
       { name: 'Yunis Caelum', role: 'The Light of Humanity - VA: AnimilkyVA', img: 'yunissilouhette.png', desc: 'YUNIS is the leader of the Scions of Fate, he is a stellar leader due to his chill, yet cautious attitude. he always seems to have good control over everything he does.. however, isn’t that way all the time.' },
       { name: 'Estella Kisiel', role: 'The Visionary - VA: Miss Emilie', img: 'estellasilouhette.png', desc: 'ESTELLA is the brains of the Scions of Fate. Her intellect is far above the rest of her friends, She has been close friends with ---- and YUNIS since primary school having had a deep connection with the two progressing all the way into their teenage years.' },
@@ -249,6 +374,7 @@
     document.getElementById('charNext').onclick = () => { charIndex = (charIndex + 1) % characters.length; updateChar(charIndex); };
     document.getElementById('charPrev').onclick = () => { charIndex = (charIndex - 1 + characters.length) % characters.length; updateChar(charIndex); };
 
+    // --- STARFIELD (Unchanged) ---
     const canvas = document.getElementById('starfield');
     const ctx = canvas.getContext('2d');
     let stars = [];
