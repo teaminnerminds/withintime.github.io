@@ -97,17 +97,20 @@
         overflow: hidden;
         border-radius: 4px;
         border: 1px solid var(--glass-border);
-        background: #000;
+        background: rgba(20, 15, 30, 0.5); /* Subtle dark backing for the image frame */
         cursor: crosshair;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .gallery-item img {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain; /* FIXED: Now ensures the 100% full image is always visible */
         transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        opacity: 0.8;
+        opacity: 0.9;
     }
     .gallery-annotation {
         position: absolute;
@@ -119,12 +122,13 @@
         border-top: 1px solid transparent;
         transform: translateY(100%);
         transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 2; /* Ensures text is always above the image */
     }
     .gallery-annotation h4 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
     .gallery-annotation p { color: var(--within-purple); font-size: 0.8rem; font-weight: 600; }
 
     .gallery-item:hover { border-color: var(--within-purple); box-shadow: 0 10px 30px rgba(164,122,255,0.2); }
-    .gallery-item:hover img { transform: scale(1.08); opacity: 1;}
+    .gallery-item:hover img { transform: scale(1.05); opacity: 1;}
     .gallery-item:hover .gallery-annotation { transform: translateY(0); border-top: 1px solid rgba(164, 122, 255, 0.3); }
 
     /* Gameplay Features */
@@ -243,7 +247,7 @@
   <section id="trailer" style="align-items: center;">
     <h2 class="reveal-scale">Official Trailer</h2>
     <div class="reveal-slide-up" style="width: 100%; max-width: 1000px; aspect-ratio: 16/9; border: 2px solid var(--within-purple); position: relative; z-index: 2;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/AZx1WWpc7b0" frameborder="0" allowfullscreen></iframe>
+        <iframe width="100%" height="100%" src="https://youtu.be/pXOFb7ZVzNg?si=8hFp6CfJshAdNuMF" frameborder="0" allowfullscreen></iframe>
     </div>
   </section>
 
@@ -285,7 +289,7 @@
           </div>
       </div>
       <div class="gallery-item span-4 reveal-stagger">
-          <img src="story5.png" alt="Lore Scene 2">
+          <img src="story4.png" alt="Lore Scene 2">
           <div class="gallery-annotation">
               <h4>Back Together.</h4>
               <p>As it should be...</p>
