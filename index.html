@@ -138,14 +138,53 @@
     .char-controls button { background: transparent; color: white; border: 1px solid white; padding: 12px 25px; cursor: pointer; font-family: 'Unbounded'; font-weight: 600; transition: 0.3s; }
     .char-controls button:hover { background: white; color: black; }
 
-    /* Upgraded Socials Section */
-    .social-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 3rem; max-width: 1000px; opacity: 1;}
-    .social-btn { position: relative; display: flex; align-items: center; gap: 15px; background: rgba(20, 15, 30, 0.6); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); padding: 20px 35px; color: white; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; flex: 1 1 250px; justify-content: center; min-height: 65px;}
-    .social-btn svg { width: 24px; height: 24px; fill: currentColor; transition: 0.4s; flex-shrink: 0;}
-    .social-btn:hover { background: rgba(164, 122, 255, 0.1); color: #fff; transform: translateY(-8px); box-shadow: 0 15px 30px rgba(164,122,255,0.2); border-color: var(--within-purple); }
-    .social-btn:hover svg { fill: var(--within-purple); filter: drop-shadow(0 0 8px var(--within-purple)); transform: scale(1.1); }
-    .social-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transform: skewX(-20deg); transition: 0.5s; }
-    .social-btn:hover::after { left: 150%; }
+    /* --- BRAND NEW, SOLID SOCIAL BUTTONS --- */
+    .social-links { 
+        display: flex; 
+        gap: 20px; 
+        justify-content: center; 
+        flex-wrap: wrap; 
+        margin-top: 3rem; 
+        max-width: 1000px; 
+        opacity: 1 !important; 
+        visibility: visible !important;
+    }
+    .social-btn { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        gap: 15px; 
+        background: var(--bg-dark); 
+        border: 2px solid var(--within-purple); 
+        padding: 18px 30px; 
+        color: white; 
+        text-decoration: none; 
+        font-weight: 900; 
+        text-transform: uppercase; 
+        letter-spacing: 2px; 
+        transition: 0.3s ease; 
+        flex: 1 1 200px; 
+        max-width: 280px;
+        opacity: 1 !important; 
+        visibility: visible !important;
+        box-shadow: 0 0 15px rgba(164, 122, 255, 0.1);
+    }
+    .social-btn svg { 
+        width: 24px; 
+        height: 24px; 
+        fill: var(--within-purple); 
+        transition: 0.3s ease; 
+        flex-shrink: 0;
+    }
+    .social-btn:hover { 
+        background: var(--within-purple); 
+        color: black; 
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 30px rgba(164, 122, 255, 0.4); 
+    }
+    .social-btn:hover svg { 
+        fill: black; 
+    }
 
     /* The Contract Section */
     #contract { align-items: center; text-align: center; background: radial-gradient(circle at center, rgba(164,122,255,0.05) 0%, transparent 70%); }
@@ -495,14 +534,13 @@
     gsap.utils.toArray('.reveal-slide-up').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" }); });
     gsap.utils.toArray('.reveal-scale').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, scale: 0.9, opacity: 0, duration: 1, ease: "back.out(1.5)" }); });
 
-    // Patch for the Socials / Grids so they don't get stuck hidden
-    const grids = document.querySelectorAll('.dynamic-gallery, .features-grid, .social-links');
+    const grids = document.querySelectorAll('.dynamic-gallery, .features-grid');
     grids.forEach(grid => {
         const items = grid.querySelectorAll('.reveal-stagger');
         gsap.from(items, {
             scrollTrigger: { 
                 trigger: grid, 
-                start: "top 95%", // Lowered trigger point so it fires earlier
+                start: "top 95%",
                 toggleActions: "play none none none"
             },
             y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out"
@@ -551,10 +589,7 @@
     document.getElementById('hero-logo').addEventListener('click', () => {
         logoClicks++;
         
-        // Optional: you can console.log(logoClicks) here if you want to test it easily in dev tools
-        
         if(logoClicks === 13) {
-            // 1. Create the secret overlay screen
             const farewellScreen = document.createElement('div');
             farewellScreen.style.cssText = "position:fixed;inset:0;background:#000;z-index:999999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;";
             
@@ -564,14 +599,9 @@
             
             farewellScreen.appendChild(text);
             document.body.appendChild(farewellScreen);
-
-            // 2. Lock the user's scroll
             document.body.style.overflow = "hidden";
 
-            // 3. The dramatic, real-time wipe animation
             const wipeTl = gsap.timeline();
-            
-            // Grab everything visually on the page right now
             const allPageElements = document.querySelectorAll('section, nav, .bg-fragment, canvas:not(#signature-pad)');
             
             wipeTl.to(allPageElements, {
@@ -579,10 +609,9 @@
                 opacity: 0,
                 filter: "blur(10px)",
                 duration: 2,
-                stagger: { amount: 1.5, from: "random" }, // Pieces disappear randomly
+                stagger: { amount: 1.5, from: "random" }, 
                 ease: "power4.in"
             })
-            // Finally, fade in the cryptic text
             .to(farewellScreen, { 
                 opacity: 1, 
                 duration: 3, 
