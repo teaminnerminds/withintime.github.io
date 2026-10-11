@@ -433,10 +433,10 @@
     <div class="wrap">
       <header class="sec-head center">
         <span class="eyebrow"><b>01</b> Vision fragment</span><br>
-        <h2 class="echo"><span class="fill-within">Official Trailer</span></h2>
+        <h2 class="echo"><span class="fill-within">Reveal Trailer</span></h2>
       </header>
       <div class="player-wrap rv">
-        <button class="player" id="player" type="button" aria-label="Play the official Within Time trailer">
+        <button class="player" id="player" type="button" aria-label="Play the Within Time reveal trailer">
           <img src="assets/keyart/promo-cast.webp" alt="" loading="lazy" />
           <span class="play">
             <span class="play-disc">
@@ -448,7 +448,7 @@
         </button>
       </div>
       <div class="player-meta">
-        <span>Within Time &middot; Official trailer</span>
+        <span>Within Time &middot; Reveal trailer</span>
         <a href="https://www.youtube.com/@withintimegame" target="_blank" rel="noopener">More on YouTube &#8599;</a>
       </div>
     </div>
@@ -770,7 +770,7 @@
 
     // ---------- Trailer: lightweight facade until clicked ----------
     document.getElementById('player').addEventListener('click', function () {
-      this.outerHTML = '<div class="player"><iframe src="https://www.youtube-nocookie.com/embed/pXOFb7ZVzNg?autoplay=1&rel=0" title="Within Time official trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+      this.outerHTML = '<div class="player"><iframe src="https://www.youtube-nocookie.com/embed/xEPajsRiqTc?autoplay=1&rel=0" title="Within Time reveal trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
     }, { once: true });
     document.getElementById('heroTrailer').addEventListener('click', e => { e.preventDefault(); WT.scrollToSection('trailer'); });
 
