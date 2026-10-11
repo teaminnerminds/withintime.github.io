@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Devlog | Within Time</title>
+  <meta name="description" content="Development updates for Within Time: art, systems, story, and music, straight from the team." />
+  <meta name="theme-color" content="#06020c" />
+  <link rel="icon" type="image/png" href="logotransp.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,100..900;1,50..125,100..900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <link rel="stylesheet" href="assets/css/site.css" />
+
+  <style>
+    .devlog-hero { padding-top: calc(var(--topbar) + clamp(60px, 12vh, 120px)); padding-bottom: 40px; }
+    .devlog-hero .display { font-size: clamp(2.6rem, 8vw, 7rem); }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px; }
+    .filter {
+      font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 9px 18px; border: 1px solid var(--line); color: var(--text-dim); transition: 0.25s;
+    }
+    .filter:hover { color: #fff; border-color: var(--violet); }
+    .filter.active { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+
+    #postList { display: grid; gap: 16px; padding-bottom: 12vh; }
+    .save--row { grid-template-columns: auto 220px 1fr; }
+    .save--row .save-file { grid-row: span 1; align-self: center; }
+    .save-cover { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid var(--line-hot); align-self: center; }
+    .save-cover.none { display: grid; place-items: center; background: repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 8px, transparent 8px 16px); font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.25em; color: var(--text-faint); }
+    .save-body { display: grid; gap: 8px; align-content: center; }
+    .save-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .save-tags span { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet-hi); border: 1px solid rgba(180, 92, 240, 0.3); padding: 3px 9px; }
+
+    #postDetail { display: none; padding-bottom: 12vh; }
+    #postDetail.visible { display: block; }
+    #listView.hidden { display: none; }
+    .back-link { display: inline-flex; gap: 10px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--crimson-hi); text-decoration: none; margin-bottom: 32px; }
+    .back-link:hover { color: #fff; }
+    .post-cover { width: 100%; max-height: 52vh; object-fit: cover; border: 1px solid var(--line-hot); margin-bottom: 40px; }
+    .post-meta { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--violet-hi); margin-bottom: 14px; }
+    .post-title { font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; margin-bottom: 40px; }
+    .post-body { max-width: 780px; padding: 40px clamp(20px, 4vw, 48px); }
+    .post-body p { font-size: 1.05rem; line-height: 1.85; color: #ece7f7; }
+    .post-body p + p { margin-top: 1.2em; }
+    .post-body h3 { font-style: italic; font-weight: 900; font-stretch: 115%; text-transform: uppercase; margin: 2em 0 0.8em; }
+    .post-body img { margin: 1.6em 0; border: 1px solid var(--line-hot); }
+    .post-body ul { margin: 1em 0 1em 1.2em; line-height: 1.8; }
+    .empty { font-family: var(--mono); color: var(--text-dim); letter-spacing: 0.15em; padding: 60px 0; text-align: center; text-transform: uppercase; }
+
+    @media (max-width: 860px) {
+      .save--row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sky" aria-hidden="true">
+    <div class="sky-grad"></div>
+    <canvas id="dust"></canvas>
+    <svg class="sky-moon" viewBox="0 0 200 200">
+      <defs>
+        <mask id="moonMask"><rect width="200" height="200" fill="#fff" /><circle id="moonShadow" cx="128" cy="72" r="74" fill="#000" /></mask>
+      </defs>
+      <circle class="moon-glow" cx="100" cy="100" r="84" mask="url(#moonMask)" />
+      <circle class="moon-body" cx="100" cy="100" r="80" mask="url(#moonMask)" />
+    </svg>
+    <div class="grain"></div>
+  </div>
+
+  <header class="topbar">
+    <a href="index.html" class="brand" aria-label="Within Time home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><defs><mask id="brandMask"><rect width="32" height="32" fill="#fff"/><circle cx="20.5" cy="11.5" r="11.8" fill="#000"/></mask></defs><circle cx="16" cy="16" r="12.8" fill="#fbf8ff" mask="url(#brandMask)"/></svg>
+      <span class="brand-word">Within <b>Time</b></span>
+    </a>
+    <nav class="nav" aria-label="Site">
+      <a href="index.html#trailer"><i>01</i>Trailer</a>
+      <a href="index.html#story"><i>02</i>Story</a>
+      <a href="index.html#worlds"><i>03</i>Worlds</a>
+      <a href="index.html#combat"><i>04</i>Combat</a>
+      <a href="index.html#cast"><i>05</i>Cast</a>
+      <a href="index.html#acts"><i>06</i>Release</a>
+      <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="btn btn--primary" target="_blank" rel="noopener">Wishlist</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+
+  <nav class="mobile-nav" aria-label="Mobile">
+    <a href="index.html"><i>00</i>Home</a>
+    <a href="index.html#story"><i>02</i>Story</a>
+    <a href="index.html#worlds"><i>03</i>Worlds</a>
+    <a href="index.html#combat"><i>04</i>Combat</a>
+    <a href="index.html#cast"><i>05</i>Cast</a>
+    <a href="index.html#acts"><i>06</i>Release</a>
+    <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" rel="noopener"><i>&#9670;</i>Wishlist on Steam</a>
+  </nav>
+
+  <button class="audio-widget" type="button" aria-label="Toggle the Within Time theme" aria-pressed="false">
+    <canvas width="40" height="20"></canvas>
+    <span class="audio-label"><b>Play theme</b>OST by Oxiqa</span>
+  </button>
+
+  <main>
+    <section class="devlog-hero">
+      <div class="wrap">
+        <span class="eyebrow"><b>&#9670;</b> Transmission log</span><br>
+        <h1 class="display echo"><span class="fill-within">The Chronicle</span></h1>
+        <p class="lede">Development updates, art and behind-the-scenes notes from Team Innerminds and Lunavia. New entries land whenever there is something real to share.</p>
+      </div>
+    </section>
+
+    <section style="padding-top: 0;">
+      <div class="wrap">
+        <div id="listView">
+          <div class="filters" id="filters"></div>
+          <div id="postList"></div>
+        </div>
+        <article id="postDetail">
+          <a class="back-link" href="#" id="backLink">&#9664; All entries</a>
+          <div id="postContent"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="innerminds"><span class="innerminds-mark" aria-hidden="true"></span><span><small>Team</small><b>Innerminds</b></span></div>
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" rel="noopener">Steam</a>
+      <a href="https://discord.com/invite/BP3jBjgWn5" target="_blank" rel="noopener">Discord</a>
+    </div>
+    <span>&copy; 2026 Team Innerminds, Lunavia</span>
+  </footer>
+
+  <script src="devlog/posts.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script>
+    const WT = WithinTime;
+    WT.initEcho();
+    WT.initDust();
+    WT.initMoon({ phase: 0.15 });
+    WT.initNav();
+    WT.initAmbientAudio('Track 1 - Re;Start.mp3');
+
+    const posts = [...DEVLOG_POSTS].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const tags = ['All', ...new Set(posts.flatMap(p => p.tags || []))];
+    let activeTag = 'All';
+
+    const filters = document.getElementById('filters');
+    const list = document.getElementById('postList');
+    const listView = document.getElementById('listView');
+    const detail = document.getElementById('postDetail');
+    const content = document.getElementById('postContent');
+
+    const fmt = d => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+
+    function renderFilters() {
+      filters.innerHTML = tags.map(t => `<button type="button" class="filter ${t === activeTag ? 'active' : ''}" data-tag="${t}">${t}</button>`).join('');
+      filters.querySelectorAll('.filter').forEach(b => b.addEventListener('click', () => { activeTag = b.dataset.tag; renderFilters(); renderList(); }));
+    }
+
+    function renderList() {
+      const shown = activeTag === 'All' ? posts : posts.filter(p => (p.tags || []).includes(activeTag));
+      if (!shown.length) { list.innerHTML = '<div class="empty">No entries under this tag yet.</div>'; return; }
+      list.innerHTML = shown.map((p, i) => `
+        <a href="#${p.slug}" class="save save--row rv" data-delay="${Math.min(i, 5) * 0.08}">
+          <div class="save-file"><small>File</small><strong>${String(posts.indexOf(p) + 1).padStart(2, '0')}</strong></div>
+          ${p.cover ? `<img class="save-cover" src="${p.cover}" alt="" loading="lazy">` : '<div class="save-cover none">No image</div>'}
+          <div class="save-body">
+            <div class="save-meta"><span>${fmt(p.date)}</span></div>
+            <h3>${p.title}</h3>
+            <p>${p.excerpt}</p>
+            <div class="save-tags">${(p.tags || []).map(t => `<span>${t}</span>`).join('')}</div>
+          </div>
+          <span class="save-load">Load &#9654;</span>
+        </a>`).join('');
+      WT.initReveals(list);
+    }
+
+    function renderDetail(slug) {
+      const post = posts.find(p => p.slug === slug);
+      if (!post) { showList(); return; }
+      content.innerHTML = `
+        ${post.cover ? `<img class="post-cover" src="${post.cover}" alt="">` : ''}
+        <div class="post-meta">${fmt(post.date)}${post.tags && post.tags.length ? ' &middot; ' + post.tags.join(' &middot; ') : ''}</div>
+        <h2 class="post-title">${post.title}</h2>
+        <div class="dialogue post-body"><span class="dialogue-name">Lunavia</span>${post.body}</div>`;
+      listView.classList.add('hidden');
+      detail.classList.add('visible');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function showList() {
+      listView.classList.remove('hidden');
+      detail.classList.remove('visible');
+    }
+
+    function route() {
+      const slug = location.hash.slice(1);
+      if (slug) renderDetail(slug); else showList();
+    }
+
+    document.getElementById('backLink').addEventListener('click', e => {
+      e.preventDefault();
+      history.pushState('', document.title, location.pathname);
+      showList();
+    });
+    window.addEventListener('hashchange', route);
+
+    renderFilters();
+    renderList();
+    route();
+    WT.initReveals();
+  </script>
+</body>
+</html>

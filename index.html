@@ -4,636 +4,934 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Within Time | Official Site</title>
+  <meta name="description" content="Within Time, a turn-based RPG where four childhood friends cross into Iolade to unravel a prophecy that threatens two worlds. FATE CHANGES FOR NO ONE." />
+  <meta name="theme-color" content="#06020c" />
+  <meta property="og:title" content="Within Time" />
+  <meta property="og:description" content="A turn-based RPG by Team Innerminds. Six months remain. Fate changes for no one." />
+  <meta property="og:image" content="assets/keyart/promo-main.webp" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/png" href="logotransp.png" />
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,50..125,100..900;1,50..125,100..900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/keyart/promo-main.webp" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
 
+  <link rel="stylesheet" href="assets/css/site.css" />
+
   <style>
-    :root {
-      --within-purple: #a47aff;
-      --bg-dark: #050208;
-      --text-main: #f0f0f5;
-      --glass-border: rgba(164, 122, 255, 0.2);
+    /* ============================== HERO ============================== */
+    #hero { padding: 0; height: 100svh; min-height: 600px; display: flex; align-items: flex-end; overflow: hidden; background: var(--ink); }
+    .hero-art { position: absolute; inset: 0; overflow: hidden; }
+    .hero-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+    .hero-art .ghost { opacity: 0; mix-blend-mode: screen; filter: saturate(0.6) hue-rotate(-25deg); }
+    .hero-shade {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        linear-gradient(0deg, var(--ink) 0%, rgba(6, 2, 12, 0.82) 16%, rgba(6, 2, 12, 0) 46%),
+        linear-gradient(90deg, rgba(6, 2, 12, 0.6) 0%, rgba(6, 2, 12, 0) 38%),
+        linear-gradient(180deg, rgba(6, 2, 12, 0.7) 0%, rgba(6, 2, 12, 0) 16%);
+    }
+    .hero-egg { position: absolute; left: 34%; top: 26%; width: 36%; height: 42%; z-index: 1; }
+    .hero-frame {
+      position: absolute; inset: calc(var(--topbar) + 4px) 18px 18px; border: 1px solid rgba(232, 40, 60, 0.38);
+      pointer-events: none; z-index: 2;
+    }
+    .hero-frame span {
+      position: absolute; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--text-dim); background: var(--ink); padding: 2px 10px;
+    }
+    .hero-frame .tl { top: -9px; left: 22px; }
+    .hero-frame .tr { top: -9px; right: 22px; color: var(--crimson-hi); font-variant-numeric: tabular-nums; }
+    .hero-frame .tr::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--crimson); margin-right: 8px; vertical-align: 1px; animation: rec 1.4s steps(2) infinite; }
+    @keyframes rec { 50% { opacity: 0; } }
+    .hero-content {
+      position: relative; z-index: 3; width: 100%; padding: 0 calc(var(--gutter) + 8px) clamp(100px, 13vh, 130px);
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 32px;
+    }
+    .hero-tag { font-size: clamp(1.7rem, 3.6vw, 3.3rem); }
+    .hero-sub { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 16px; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+    .scroll-cue { display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-faint); margin-right: 150px; }
+    .scroll-cue i { width: 1px; height: 54px; background: linear-gradient(180deg, var(--crimson), transparent); position: relative; overflow: hidden; }
+    .scroll-cue i::after { content: ''; position: absolute; left: 0; top: -20px; width: 1px; height: 20px; background: #fff; animation: drip 1.8s var(--ease) infinite; }
+    @keyframes drip { to { top: 60px; } }
+
+    @media (max-aspect-ratio: 1/1), (max-width: 760px) {
+      #hero { height: auto; min-height: 0; flex-direction: column; align-items: stretch; padding-top: var(--topbar); }
+      .hero-art { position: relative; inset: auto; aspect-ratio: 16 / 9; width: 100%; }
+      .hero-shade { background: linear-gradient(0deg, var(--ink) 0%, rgba(6, 2, 12, 0) 35%); }
+      .hero-frame { display: none; }
+      .hero-content { padding: 18px var(--gutter) 56px; flex-direction: column; align-items: flex-start; }
+      .scroll-cue { display: none; }
+      .hero-ctas .btn { flex: 1 1 200px; }
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: 'Unbounded', sans-serif; 
-      background: var(--bg-dark); 
-      color: var(--text-main); 
-      overflow-x: hidden;
+    /* ============================== TICKER ============================== */
+    .ticker { position: relative; height: 140px; overflow: hidden; }
+    .band { position: absolute; left: -5%; width: 110%; padding: 14px 0; overflow: hidden; }
+    .band--a { top: 26px; z-index: 2; background: linear-gradient(180deg, #f0323f, #b8121f); transform: rotate(-2.2deg); box-shadow: 0 10px 40px -10px rgba(232, 40, 60, 0.6); }
+    .band--b { top: 56px; background: #220d44; transform: rotate(1.6deg); }
+    .band-track { display: flex; width: max-content; animation: marquee 50s linear infinite; }
+    .band--b .band-track { animation-direction: reverse; animation-duration: 70s; }
+    .band-track span {
+      font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: 1.15rem;
+      letter-spacing: 0.04em; padding: 0 26px; white-space: nowrap; color: #fff;
     }
+    .band--b .band-track span { color: rgba(239, 234, 247, 0.5); font-size: 0.95rem; }
+    .band-track span.sep { padding: 0; opacity: 0.6; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
 
-    /* Fixed Visual Elements */
-    #starfield { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #050208; }
-    .bg-fragment {
-      position: fixed; top: 0; right: -10%; width: 45%; height: 120%;
-      background: rgba(164, 122, 255, 0.02);
-      transform: rotate(12deg); z-index: -1;
-      border-left: 1px solid rgba(164, 122, 255, 0.1);
+    /* ============================== TRAILER ============================== */
+    .player-wrap { position: relative; max-width: 1100px; margin: 0 auto; }
+    .player-wrap::before, .player-wrap::after { content: ''; position: absolute; inset: 0; pointer-events: none; border: 1px solid; }
+    .player-wrap::before { border-color: rgba(180, 92, 240, 0.45); transform: translate(-18px, 18px); }
+    .player-wrap::after { border-color: rgba(180, 92, 240, 0.18); transform: translate(-36px, 36px); }
+    .player { position: relative; z-index: 1; aspect-ratio: 16 / 9; background: #000; overflow: hidden; border: 1px solid var(--line-hot); cursor: pointer; display: block; width: 100%; }
+    .player img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease), filter 0.6s; filter: brightness(0.72); }
+    .player:hover img { transform: scale(1.03); filter: brightness(0.85); }
+    .player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .play { position: absolute; left: 26%; top: 74%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .play-disc { position: relative; width: clamp(84px, 10vw, 124px); aspect-ratio: 1; display: grid; place-items: center; }
+    .play-disc svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 14s linear infinite; }
+    .play-disc .core { width: 64%; aspect-ratio: 1; border-radius: 50%; background: rgba(232, 40, 60, 0.9); display: grid; place-items: center; transition: transform 0.4s var(--ease), background 0.3s; box-shadow: 0 0 40px rgba(232, 40, 60, 0.55); }
+    .play-disc .core svg { width: 34%; fill: #fff; margin-left: 6%; }
+    .player:hover .core { transform: scale(1.1); background: var(--crimson-hi); }
+    .play span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.35em; text-transform: uppercase; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .player-meta { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; max-width: 1100px; margin: 50px auto 0; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-faint); }
+    .player-meta a { color: var(--text-dim); text-decoration: none; }
+    .player-meta a:hover { color: var(--crimson-hi); }
+
+    /* ============================== STORY ============================== */
+    .story-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+    .countdown { display: flex; align-items: flex-end; gap: 18px; line-height: 0.8; }
+    .countdown .cd-num { font-style: italic; font-weight: 900; font-stretch: 125%; font-size: clamp(7rem, 17vw, 15rem); letter-spacing: -0.04em; }
+    .countdown .cd-unit { font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.3em; font-size: 0.85rem; color: var(--text-dim); padding-bottom: 1.6em; line-height: 1.6; }
+    .story-copy { margin-top: 26px; color: var(--text-dim); max-width: 440px; }
+    .story-copy strong { color: var(--text); font-weight: 600; }
+
+    .vn { cursor: pointer; min-height: 250px; display: flex; flex-direction: column; user-select: none; }
+    .vn-text { flex: 1; font-size: clamp(1.05rem, 1.45vw, 1.28rem); line-height: 1.75; min-height: 6.5em; }
+    .vn-text em { font-style: normal; color: var(--violet-hi); }
+    .vn-text b { color: var(--crimson-hi); font-weight: 700; }
+    .vn-text.final { font-style: italic; font-weight: 900; font-stretch: 125%; font-size: clamp(1.4rem, 2.4vw, 2rem); text-transform: uppercase; color: #fff; }
+    .vn-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-faint); }
+    .vn-dots { display: flex; gap: 6px; }
+    .vn-dots i { width: 18px; height: 3px; background: var(--line); transition: background 0.3s; }
+    .vn-dots i.on { background: var(--crimson); }
+    .vn-next { color: var(--text); display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase; }
+    .vn-next::after { content: '\25BC'; color: var(--crimson-hi); animation: bob 1s ease-in-out infinite; font-size: 0.7rem; }
+    @keyframes bob { 50% { transform: translateY(3px); } }
+    .vn-pages { display: none; }
+
+    .cast-strip { position: relative; margin: clamp(90px, 14vh, 160px) calc(-1 * var(--gutter)) 0; height: clamp(200px, 32vw, 560px); overflow: hidden; border-top: 2px solid var(--crimson-lo); border-bottom: 2px solid var(--crimson-lo); }
+    .cast-strip img { position: absolute; top: 0; left: -8%; width: 116%; height: 100%; object-fit: cover; object-position: 70% 30%; }
+    .cast-strip::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6, 2, 12, 0.85), transparent 40%, transparent 80%, rgba(6, 2, 12, 0.6)); }
+    /* Story beats: a thread of moments down the middle, shots alternating sides */
+    .beats { position: relative; margin-top: clamp(90px, 14vh, 160px); }
+    .beats::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%);
+      background: linear-gradient(180deg, transparent, var(--violet) 8%, var(--violet-hi) 60%, var(--crimson) 92%, transparent); opacity: 0.55; }
+    .beat { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px, 8vw, 128px); align-items: center; margin-bottom: clamp(80px, 13vh, 140px); }
+    .beat::after { content: ''; position: absolute; left: 50%; top: 50%; width: 14px; height: 14px; transform: translate(-50%, -50%); border-radius: 50%;
+      background: radial-gradient(circle at 70% 30%, var(--ink) 44%, var(--moon) 46%); box-shadow: 0 0 14px rgba(255, 255, 255, 0.5); }
+    .beat:nth-child(even) .beat-text { order: 2; }
+    .beat-when { display: inline-flex; gap: 12px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 14px; }
+    .beat-when b { color: var(--crimson-hi); font-weight: 400; }
+    .beat h3.echo { display: block; font-size: clamp(1.9rem, 3.8vw, 3.3rem); margin-bottom: 18px; }
+    .beat p { color: var(--text-dim); font-size: clamp(1rem, 1.25vw, 1.1rem); max-width: 520px; }
+    .beat p strong { color: var(--text); font-weight: 600; }
+    .beat--hook { grid-template-columns: 1fr; text-align: center; min-height: clamp(380px, 62vh, 600px); place-items: center; margin-bottom: 0;
+      background-size: cover; background-position: center; border: 1px solid var(--line-hot); overflow: hidden; isolation: isolate; }
+    .beat--hook::before { content: ''; position: absolute; inset: 0; z-index: -1;
+      background: radial-gradient(ellipse 60% 70% at 50% 50%, rgba(6, 2, 12, 0.55), rgba(6, 2, 12, 0.94) 80%); }
+    .beat--hook::after { top: -7px; }
+    .beat--hook .beat-text { padding: clamp(32px, 6vw, 72px); }
+    .beat--hook h3.echo { font-size: clamp(2.4rem, 6vw, 5.4rem); }
+    .beat--hook p { margin: 0 auto; color: rgba(239, 234, 247, 0.85); }
+
+    /* ============================== WORLDS ============================== */
+    /* One scene, two worlds: Iolade is masked over Terrus and the seam follows the pointer */
+    .rift { --x: 50%; --t: 0.5; position: relative; height: clamp(460px, 74vh, 720px); overflow: hidden; border: 1px solid var(--line-hot); background: linear-gradient(90deg, #2a0a12, #1a0b3a); cursor: ew-resize; touch-action: pan-y; }
+    .rift-layer { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .rift-layer::after { content: ''; position: absolute; inset: 0; }
+    .rift-terrus { background-color: #2a0a12; background-position: 30% center; }
+    .rift-terrus::after { background: linear-gradient(0deg, rgba(50, 4, 12, 0.92), rgba(120, 20, 30, 0.25) 55%, rgba(120, 20, 30, 0.1)); }
+    .rift-iolade {
+      background-color: #1a0b3a;
+      -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--x) - 9%), #000 calc(var(--x) + 9%));
+              mask-image: linear-gradient(90deg, transparent calc(var(--x) - 9%), #000 calc(var(--x) + 9%));
     }
+    .rift-iolade::after { background: linear-gradient(0deg, rgba(20, 6, 52, 0.94), rgba(90, 40, 180, 0.25) 55%, rgba(90, 40, 180, 0.08)); }
+    .rift-seam { position: absolute; top: 0; bottom: 0; left: var(--x); width: 2px; transform: translateX(-50%); pointer-events: none; z-index: 2;
+      background: linear-gradient(180deg, transparent, #fff 20%, #fff 80%, transparent); box-shadow: 0 0 24px 6px rgba(200, 120, 255, 0.55), 0 0 60px 20px rgba(232, 40, 60, 0.25); }
+    .rift-seam::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 180px; transform: translateX(-50%);
+      background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(180, 92, 240, 0.28), transparent 70%); }
+    .rift-moon { position: absolute; left: 50%; top: 42%; width: 56px; height: 56px; transform: translate(-50%, -50%); border-radius: 50%;
+      background: radial-gradient(circle at 70% 30%, transparent 46%, #fbf8ff 48%); filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.7)); }
+    .rift-info { position: absolute; z-index: 3; bottom: 0; padding: clamp(24px, 4vw, 48px); max-width: 46%; pointer-events: none; transition: opacity 0.3s; }
+    .rift-info--terrus { left: 0; opacity: calc(0.15 + var(--t) * 0.85); }
+    .rift-info--iolade { right: 0; text-align: right; opacity: calc(1 - var(--t) * 0.85); }
+    .rift-info .realm-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--text-dim); }
+    .rift-info h3 { font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(2.2rem, 5vw, 4.6rem); line-height: 1; margin: 8px 0 14px; }
+    .rift-info p { color: rgba(239, 234, 247, 0.85); font-size: 0.98rem; }
+    .rift-hint { position: absolute; z-index: 3; top: 18px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim); background: rgba(6, 2, 12, 0.6); padding: 6px 12px; pointer-events: none; transition: opacity 0.6s; }
+    .rift.touched .rift-hint { opacity: 0; }
+    .rift-range { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; z-index: 4; cursor: ew-resize; margin: 0; }
+    .rift-range:focus-visible + .rift-focus { opacity: 1; }
+    .rift-focus { position: absolute; inset: 0; z-index: 5; border: 2px solid var(--crimson-hi); opacity: 0; pointer-events: none; }
 
-    /* Lunar Navigation */
-    .lunar-nav {
-        position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
-        display: flex; flex-direction: column; align-items: center; gap: 20px;
-        z-index: 1000;
+    .explore { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 22px; }
+    .explore .scene:nth-child(2) { margin-top: 30px; }
+    .world-foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 40px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-faint); }
+    .world-foot b { color: var(--text); font-weight: 400; }
+
+    /* ============================== COMBAT ============================== */
+    .combat { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+    .combat-copy p { font-size: clamp(1rem, 1.3vw, 1.12rem); color: var(--text-dim); }
+    .combat-copy p + p { margin-top: 1.1em; }
+    .combat-copy strong { color: var(--text); font-weight: 700; }
+    /* Two shots overlap like the promo collage */
+    .combat-shots { position: relative; padding-bottom: 14%; }
+    .combat-shots .slot:first-child { width: 86%; }
+    .combat-shots .slot:last-child { position: absolute; right: 0; bottom: 0; width: 62%; box-shadow: 0 0 0 6px var(--ink), 0 30px 60px -20px rgba(0, 0, 0, 0.9); }
+
+    /* ============================== CAST ============================== */
+    #cast { --accent: #d0303a; overflow: hidden; }
+    .cast { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+    .cast-stage { position: relative; height: min(82vh, 860px); min-height: 520px; }
+    .cast-glow { position: absolute; left: 50%; top: 50%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); background: radial-gradient(circle, color-mix(in srgb, var(--accent) 38%, transparent) 0%, transparent 60%); transition: background 0.8s; }
+    .cast-ring { position: absolute; left: 50%; top: 46%; width: 86%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.08); }
+    .cast-ring::after { content: ''; position: absolute; inset: 8%; border-radius: 50%; border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent); animation: spin 60s linear infinite; }
+    .cast-bgname {
+      position: absolute; left: 50%; top: 4%; white-space: nowrap; pointer-events: none;
+      font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(5rem, 13vw, 12rem); line-height: 1;
+      color: transparent; -webkit-text-stroke: 1px rgba(255, 255, 255, 0.09);
     }
-    .nav-dot { width: 24px; height: 24px; cursor: pointer; position: relative; }
-    .nav-dot svg { width: 100%; height: 100%; fill: rgba(255,255,255,0.15); transition: 0.3s; }
-    .nav-dot:hover svg { fill: var(--within-purple); }
-    .nav-dot.active svg { fill: var(--within-purple); filter: drop-shadow(0 0 8px var(--within-purple)); }
-    .nav-label {
-        position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
-        font-size: 0.65rem; font-weight: 900; color: var(--within-purple);
-        white-space: nowrap; opacity: 0; transition: 0.3s; pointer-events: none;
-        text-transform: uppercase; letter-spacing: 2px;
+    .cast-figure { position: absolute; inset: 0; }
+    .cast-figure img { position: absolute; left: 50%; bottom: 0; height: 100%; width: auto; max-width: none; }
+    .cast-figure .ghost { filter: grayscale(1) sepia(1) hue-rotate(225deg) saturate(2.4) brightness(0.85); pointer-events: none; }
+    .cast-figure .main { filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.6)); }
+    .cast-floor { position: absolute; left: 10%; right: 10%; bottom: -10px; height: 40px; background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75), transparent 70%); }
+
+    .cast-index { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-faint); }
+    .cast-index b { color: var(--accent); font-weight: 400; transition: color 0.5s; }
+    .cast-name { margin: 12px 0 6px; font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; line-height: 0.92; }
+    .cast-name .first { display: block; font-size: clamp(3rem, 7vw, 6.4rem); background: linear-gradient(180deg, #fff 10%, var(--accent) 120%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 0.03em #0a0312; paint-order: stroke fill; }
+    .cast-name .last { display: block; font-size: clamp(1.2rem, 2.4vw, 2rem); color: var(--text-dim); letter-spacing: 0.06em; }
+    .cast-title { display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 0.76rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin: 16px 0 34px; transition: color 0.5s; }
+    .cast-title span:last-child { color: var(--text-faint); }
+    .cast .dialogue-name { border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+    .party { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 40px; }
+    .party button { position: relative; aspect-ratio: 10 / 3; background-size: cover; background-position: center; border: 1px solid var(--line); filter: grayscale(0.85) brightness(0.6); transition: filter 0.4s, border-color 0.4s, transform 0.4s var(--ease); }
+    .party button:hover { filter: grayscale(0.3) brightness(0.85); }
+    .party button.active { filter: none; border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 10px 30px -10px var(--accent); }
+    .party button.active::after { content: ''; position: absolute; left: 50%; bottom: -12px; width: 6px; height: 6px; background: var(--accent); transform: translateX(-50%) rotate(45deg); }
+
+    /* ============================== RELEASE ============================== */
+    .release { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
+    .act-card { position: relative; padding: clamp(28px, 4vw, 48px); background: linear-gradient(160deg, rgba(232, 40, 60, 0.18), rgba(22, 10, 44, 0.9) 55%); border: 1px solid var(--line-hot); overflow: hidden; }
+    .act-card::after { content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle at 70% 30%, transparent 46%, rgba(255, 90, 100, 0.22) 48%); }
+    .act-card .eyebrow { margin-bottom: 10px; }
+    .act-card .act-big { font-style: italic; font-weight: 900; font-stretch: 125%; text-transform: uppercase; font-size: clamp(3.6rem, 9vw, 7.5rem); line-height: 0.9; }
+    .act-date { margin-top: 14px; font-style: italic; font-weight: 800; font-stretch: 115%; text-transform: uppercase; font-size: clamp(1.2rem, 2.4vw, 1.8rem); letter-spacing: 0.04em; }
+    .act-status { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); }
+    .act-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--crimson); box-shadow: 0 0 10px var(--crimson); animation: rec 1.6s steps(2) infinite; }
+    .act-card .btn { margin-top: 28px; }
+    .release-copy p { color: var(--text-dim); max-width: 560px; }
+    .release-copy p + p { margin-top: 1em; }
+    .release-copy strong { color: var(--text); font-weight: 600; }
+
+    /* Moon-phase track: Prologue + ACT 1-12 */
+    .acts-track { position: relative; margin-top: clamp(48px, 8vh, 80px); overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+    .acts { position: relative; display: grid; grid-template-columns: repeat(13, minmax(64px, 1fr)); min-width: 860px; }
+    .acts::before { content: ''; position: absolute; left: calc(100% / 26); right: calc(100% / 26); top: 22px; height: 1px; background: var(--line); }
+    .acts::after { content: ''; position: absolute; left: calc(100% / 26); width: calc(100% / 13); top: 22px; height: 2px; background: linear-gradient(90deg, #fff, var(--crimson)); }
+    .act { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .act-moon { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.18); background: var(--ink); }
+    .act.done .act-moon { background: #fbf8ff; border-color: #fff; box-shadow: 0 0 18px rgba(255, 255, 255, 0.45); }
+    .act.next .act-moon { border-color: var(--crimson); background: radial-gradient(circle at 70% 30%, var(--ink) 46%, var(--crimson-hi) 48%); box-shadow: 0 0 22px rgba(232, 40, 60, 0.6); animation: actpulse 2.4s ease-in-out infinite; }
+    @keyframes actpulse { 50% { box-shadow: 0 0 34px rgba(232, 40, 60, 0.9); } }
+    .act b { font-style: italic; font-weight: 800; font-stretch: 112%; text-transform: uppercase; font-size: 0.82rem; letter-spacing: 0.04em; color: var(--text-faint); }
+    .act small { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); }
+    .act.done b, .act.next b { color: #fff; }
+    .act.done small { color: var(--violet-hi); }
+    .act.next small { color: var(--crimson-hi); }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: clamp(56px, 9vh, 96px); }
+    .stat { padding: 30px 24px; border-left: 1px solid var(--line); }
+    .stat:first-child { border-left: 0; padding-left: 0; }
+    .stat .n { font-style: italic; font-weight: 900; font-stretch: 125%; font-size: clamp(2.6rem, 5.4vw, 4.8rem); line-height: 1; font-variant-numeric: tabular-nums; }
+    .stat .l { margin-top: 10px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--text-dim); }
+
+    /* ============================== FINALE ============================== */
+    .finale-bg { position: absolute; inset: 0; z-index: -1; background-size: cover; background-position: center 30%; opacity: 0; transition: opacity 1.6s ease; }
+    .finale-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(6, 2, 12, 0.55), rgba(6, 2, 12, 0.92) 75%), linear-gradient(0deg, var(--ink), transparent 30%, transparent 70%, var(--ink)); }
+    .finale-bg.loaded { opacity: 0.6; }
+    #finale { isolation: isolate; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+    .finale-title { font-size: clamp(2.8rem, 9vw, 8.6rem); }
+    .finale-title .echo { font-size: inherit; display: block; }
+    .finale-sub { margin: 28px auto 40px; max-width: 520px; color: var(--text-dim); }
+    .socials { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 64px; }
+    .social {
+      display: flex; align-items: center; gap: 10px; padding: 12px 18px; text-decoration: none;
+      font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+      border: 1px solid var(--line); background: rgba(6, 2, 12, 0.5); transition: 0.3s var(--ease);
     }
-    .nav-dot:hover .nav-label { opacity: 1; transform: translateY(-50%) translateX(-10px); }
+    .social svg { width: 18px; height: 18px; fill: currentColor; }
+    .social:hover { color: #fff; border-color: var(--crimson); transform: translateY(-3px); background: rgba(232, 40, 60, 0.12); }
 
-    /* Interactive Preloader */
-    #preloader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;}
-    #tagline-text { font-size: clamp(2rem, 6vw, 5rem); font-weight: 900; color: var(--within-purple); letter-spacing: 4px; text-transform: uppercase; position: absolute; text-align: center; opacity: 0; text-shadow: 0 0 30px rgba(164, 122, 255, 0.5);}
-    #signature-box { display: flex; flex-direction: column; align-items: center; gap: 20px; opacity: 0; position: absolute; }
-    #signature-box h2 { font-size: 2rem; margin-bottom: 0; color: #fff; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
-    
-    /* The Drawing Pad */
-    #signature-pad { background: rgba(20, 15, 30, 0.8); border: 2px solid var(--within-purple); border-radius: 8px; cursor: crosshair; box-shadow: 0 0 20px rgba(164, 122, 255, 0.1); touch-action: none; max-width: 90vw; }
-    .btn-container { display: flex; gap: 15px; }
-    
-    .action-btn { background: var(--within-purple); color: black; border: none; padding: 12px 25px; font-family: 'Unbounded'; font-weight: 900; cursor: pointer; transform: skewX(-15deg); transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
-    .action-btn:hover { background: #fff; box-shadow: 0 0 30px var(--within-purple); transform: skewX(-15deg) scale(1.05); }
-    .clear-btn { background: transparent; color: white; border: 1px solid white; box-shadow: none;}
-    .clear-btn:hover { background: rgba(255,255,255,0.1); color: white; box-shadow: none; }
-
-    /* Sections */
-    section { padding: 12vh 10vw; position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-    h2 { font-weight: 900; font-size: clamp(2.2rem, 5vw, 4.5rem); text-transform: uppercase; margin-bottom: 2.5rem; letter-spacing: -2px; }
-    
-    #hero { position: relative; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; background: url('bigimageforweb.png') center/cover; filter: brightness(0.5); z-index: -1; }
-    .hero-fade { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--bg-dark) 95%); z-index: 0; }
-    .content-box { background: rgba(20, 15, 30, 0.6); border-left: 5px solid var(--within-purple); padding: 3.5rem; backdrop-filter: blur(12px); max-width: 950px; line-height: 1.8; }
-
-    /* --- FIXED NATURAL-RESOLUTION BENTO GALLERY --- */
-    .dynamic-gallery {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 20px;
-        margin-top: 40px;
+    /* ============================== RESPONSIVE ============================== */
+    @media (max-width: 1080px) {
+      .combat { grid-template-columns: 1fr; }
+      .cast { grid-template-columns: 1fr; }
+      .cast-stage { height: 64vh; min-height: 440px; }
     }
-    
-    .span-6 { grid-column: span 6; }
-    .span-4 { grid-column: span 4; }
-
-    .gallery-item {
-        position: relative;
-        overflow: hidden;
-        border-radius: 4px;
-        border: 1px solid var(--glass-border);
-        background: #000;
-        cursor: crosshair;
-        display: block;
+    @media (max-width: 860px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .beats::before, .beat::after { display: none; }
+      .beat { grid-template-columns: 1fr; gap: 28px; }
+      .beat:nth-child(even) .beat-text { order: 0; }
+      .explore { grid-template-columns: 1fr; }
+      .explore .scene:nth-child(2) { margin-top: 0; }
+      .rift { height: 520px; }
+      .rift-info { max-width: 70%; padding: 20px; }
+      .rift-info p { display: none; }
+      .rift-info h3 { font-size: 2.2rem; }
+      .rift-info--terrus { top: 0; bottom: auto; }
+      .rift-hint { display: none; }
+      .release { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(3) { border-left: 0; padding-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
     }
-    .gallery-item img {
-        display: block;
-        width: 100%;
-        height: auto; 
-        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        opacity: 0.9;
-    }
-    .gallery-annotation {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 20px;
-        background: linear-gradient(to top, rgba(5, 2, 8, 0.95), rgba(5, 2, 8, 0));
-        border-top: 1px solid transparent;
-        transform: translateY(100%);
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        z-index: 2; 
-    }
-    .gallery-annotation h4 { color: #fff; font-size: 1.1rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-    .gallery-annotation p { color: var(--within-purple); font-size: 0.8rem; font-weight: 600; }
-
-    .gallery-item:hover { border-color: var(--within-purple); box-shadow: 0 10px 30px rgba(164,122,255,0.2); }
-    .gallery-item:hover img { transform: scale(1.05); opacity: 1;}
-    .gallery-item:hover .gallery-annotation { transform: translateY(0); border-top: 1px solid rgba(164, 122, 255, 0.3); }
-
-    /* Gameplay Features */
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-    .feature-tag { background: rgba(164, 122, 255, 0.1); border: 1px solid var(--glass-border); padding: 15px; font-size: 0.9rem; font-weight: 600; text-align: center;}
-
-    /* Characters */
-    #characters-section { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; }
-    .char-visual { position: relative; text-align: center; }
-    #charSilhouette { width: 100%; max-height: 80vh; object-fit: contain; filter: drop-shadow(0 0 30px var(--within-purple)); }
-    .char-controls button { background: transparent; color: white; border: 1px solid white; padding: 12px 25px; cursor: pointer; font-family: 'Unbounded'; font-weight: 600; transition: 0.3s; }
-    .char-controls button:hover { background: white; color: black; }
-
-    /* Solid Social Buttons */
-    .social-links { 
-        display: flex; 
-        gap: 20px; 
-        justify-content: center; 
-        flex-wrap: wrap; 
-        margin-top: 3rem; 
-        max-width: 1000px; 
-        opacity: 1 !important; 
-        visibility: visible !important;
-    }
-    .social-btn { 
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        gap: 15px; 
-        background: var(--bg-dark); 
-        border: 2px solid var(--within-purple); 
-        padding: 18px 30px; 
-        color: white; 
-        text-decoration: none; 
-        font-weight: 900; 
-        text-transform: uppercase; 
-        letter-spacing: 2px; 
-        transition: 0.3s ease; 
-        flex: 1 1 200px; 
-        max-width: 280px;
-        opacity: 1 !important; 
-        visibility: visible !important;
-        box-shadow: 0 0 15px rgba(164, 122, 255, 0.1);
-    }
-    .social-btn svg { 
-        width: 24px; 
-        height: 24px; 
-        fill: var(--within-purple); 
-        transition: 0.3s ease; 
-        flex-shrink: 0;
-    }
-    .social-btn:hover { 
-        background: var(--within-purple); 
-        color: black; 
-        transform: translateY(-5px); 
-        box-shadow: 0 10px 30px rgba(164, 122, 255, 0.4); 
-    }
-    .social-btn:hover svg { 
-        fill: black; 
-    }
-
-    /* The Contract Section */
-    #contract { align-items: center; text-align: center; background: radial-gradient(circle at center, rgba(164,122,255,0.05) 0%, transparent 70%); }
-    .contract-document { border: 1px solid var(--glass-border); padding: 4rem; max-width: 800px; background: rgba(5, 2, 8, 0.8); position: relative;}
-    .contract-document::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 100px; height: 3px; background: var(--within-purple); }
-    .final-signature-container { margin-top: 3rem; border-bottom: 2px dashed rgba(255,255,255,0.3); display: inline-block; padding: 10px 40px; min-width: 300px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
-    #final-signature-image { max-width: 100%; max-height: 100px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
-
-    /* Buttons */
-    .steam-cta { background: var(--within-purple); color: black; padding: 2rem 4rem; display: inline-block; font-weight: 900; text-decoration: none; transform: skewX(-15deg); transition: 0.4s; }
-    .steam-cta:hover { background: #fff; box-shadow: 0 0 50px var(--within-purple); transform: skewX(-15deg) scale(1.05); }
-
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-        .lunar-nav { display: none; }
-        #characters-section { grid-template-columns: 1fr; text-align: center; }
-        .dynamic-gallery { grid-template-columns: 1fr; }
-        .span-6, .span-4 { grid-column: span 1; }
-        .contract-document { padding: 2rem; }
-        
-        /* Mobile Spacing Fixes */
-        section { padding: 10vh 5vw; } 
-        .content-box { padding: 1.5rem; } 
+    @media (max-width: 560px) {
+      .party { grid-template-columns: 1fr 1fr; }
+      .player-wrap::after { display: none; }
+      .player-wrap::before { transform: translate(-8px, 8px); }
+      .ticker { height: 110px; }
+      .band-track span { font-size: 0.95rem; padding: 0 16px; }
     }
   </style>
 </head>
 <body>
 
-  <div id="preloader">
-    <div id="tagline-text">FATE CHANGES FOR NO ONE</div>
-    <div id="signature-box">
-        <h2>Sign your fate</h2>
-        <canvas id="signature-pad" width="400" height="150"></canvas>
-        <div class="btn-container">
-            <button id="clear-btn" class="action-btn clear-btn">Clear</button>
-            <button id="seal-btn" class="action-btn">Seal Fate</button>
-        </div>
-    </div>
+  <!-- ===================== LOADER ===================== -->
+  <div id="loader" aria-hidden="true">
+    <svg class="loader-moon" viewBox="0 0 200 200">
+      <defs>
+        <mask id="loaderMask"><rect width="200" height="200" fill="#fff" /><circle cx="128" cy="72" r="74" fill="#000" /></mask>
+      </defs>
+      <circle class="lm-echo" cx="100" cy="100" r="80" mask="url(#loaderMask)" />
+      <circle class="lm-ring" cx="100" cy="100" r="80" />
+      <circle class="lm-fill" cx="100" cy="100" r="80" mask="url(#loaderMask)" />
+    </svg>
+    <div class="loader-text">Fate changes for no one.</div>
+    <div class="loader-meta"><span>Synchronising timeline</span><span class="loader-pct">000</span></div>
+    <div class="loader-bar"></div>
+    <button class="loader-skip" type="button">Skip</button>
   </div>
 
-  <nav class="lunar-nav">
-      <div class="nav-dot active" onclick="scrollToSection('hero')"><span class="nav-label">Arrival</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('trailer')"><span class="nav-label">Visions</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('story')"><span class="nav-label">Prophecy</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('gameplay')"><span class="nav-label">Mechanics</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('characters')"><span class="nav-label">Scions</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('socials')"><span class="nav-label">Network</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
-      <div class="nav-dot" onclick="scrollToSection('contract')"><span class="nav-label">The Pact</span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div>
+  <!-- ===================== SKY ===================== -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky-grad"></div>
+    <canvas id="dust"></canvas>
+    <svg class="sky-moon" viewBox="0 0 200 200">
+      <defs>
+        <mask id="moonMask"><rect width="200" height="200" fill="#fff" /><circle id="moonShadow" cx="128" cy="72" r="74" fill="#000" /></mask>
+      </defs>
+      <circle class="moon-glow" cx="100" cy="100" r="84" mask="url(#moonMask)" />
+      <circle class="moon-body" cx="100" cy="100" r="80" mask="url(#moonMask)" />
+    </svg>
+    <div class="grain"></div>
+  </div>
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar">
+    <a href="#hero" class="brand" aria-label="Within Time, back to top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><defs><mask id="brandMask"><rect width="32" height="32" fill="#fff"/><circle cx="20.5" cy="11.5" r="11.8" fill="#000"/></mask></defs><circle cx="16" cy="16" r="12.8" fill="#fbf8ff" mask="url(#brandMask)"/></svg>
+      <span class="brand-word">Within <b>Time</b></span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#trailer"><i>01</i>Trailer</a>
+      <a href="#story"><i>02</i>Story</a>
+      <a href="#worlds"><i>03</i>Worlds</a>
+      <a href="#combat"><i>04</i>Combat</a>
+      <a href="#cast"><i>05</i>Cast</a>
+      <a href="#acts"><i>06</i>Release</a>
+      <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="btn btn--primary" target="_blank" rel="noopener">Wishlist</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><span></span></button>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+    <a href="#trailer"><i>01</i>Trailer</a>
+    <a href="#story"><i>02</i>Story</a>
+    <a href="#worlds"><i>03</i>Worlds</a>
+    <a href="#combat"><i>04</i>Combat</a>
+    <a href="#cast"><i>05</i>Cast</a>
+    <a href="#acts"><i>06</i>Release</a>
+    <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" rel="noopener"><i>&#9670;</i>Wishlist on Steam</a>
   </nav>
 
-  <canvas id="starfield"></canvas>
-  <div class="bg-fragment"></div>
+  <!-- ===================== HUD ===================== -->
+  <button class="audio-widget" type="button" aria-label="Toggle the Within Time theme" aria-pressed="false">
+    <canvas width="40" height="20"></canvas>
+    <span class="audio-label"><b>Play theme</b>OST by Oxiqa</span>
+  </button>
+  <div class="hud-days" aria-hidden="true">
+    <small>Days remain</small>
+    <strong>180</strong>
+    <div class="hud-track"><div class="hud-fill"></div></div>
+  </div>
 
-  <section id="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-fade"></div>
-    <img src="logotransp.png" id="hero-logo" alt="Within Time" style="width: 50vmin; z-index: 5;" />
-  </section>
-
-  <section id="trailer" style="align-items: center;">
-    <h2 class="reveal-scale">Official Trailer</h2>
-    <div class="reveal-slide-up" style="width: 100%; max-width: 1000px; aspect-ratio: 16/9; border: 2px solid var(--within-purple); position: relative; z-index: 2;">
-        <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/pXOFb7ZVzNg?si=Z4Xz0kxzNdzXctC5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <main>
+  <!-- ===================== HERO ===================== -->
+  <section id="hero" data-tint="#7b4bd1">
+    <h1 class="sr-only">Within Time</h1>
+    <div class="hero-art">
+      <img class="ghost" src="assets/keyart/promo-main.webp" alt="" aria-hidden="true" />
+      <img class="ghost" src="assets/keyart/promo-main.webp" alt="" aria-hidden="true" />
+      <img class="main" id="heroImg" src="assets/keyart/promo-main.webp" alt="Within Time key art: Yunis Caelum in profile beside the crescent moon logo" />
+      <div class="hero-shade"></div>
+      <button class="hero-egg" id="heroEgg" type="button" tabindex="-1" aria-hidden="true"></button>
     </div>
-  </section>
-
-  <section id="story">
-    <h2 class="reveal-slide-right">The Story</h2>
-    <div class="content-box reveal-slide-right">
-      <p><strong>Six months</strong> remain before the fate of two worlds is sealed and humanity as it's known ceases to exist. Yunis Caelum leads the charge to save humanity, followed closely by his ensemble of childhood friends — Estella Kisiel, Angie Alfaro, and Rictor Fitzsimmons — as they venture into <em>Iolade</em>, a world loosely connected to their own through a force unbeknownst to them.</p>
-      <p style="margin-top: 1.5rem;">With hopes of gaining answers to June's unprecedented disappearance just a year prior, the unlikely group of heroes make their way through Iolade, piecing together their larger roles in this prophecy as they aim to put an end to the <strong>Scion of Time's</strong> terror and allow both Iolade and Terrus to live in peace.</p>
-      <p style="margin-top: 1.5rem; font-weight: 900; color: var(--within-purple); font-size: 1.3rem; letter-spacing: 2px;">FATE CHANGES FOR NO ONE.</p>
+    <div class="hero-frame" aria-hidden="true">
+      <span class="tl">Team Innerminds &times; Lunavia</span>
+      <span class="tr" id="timecode">00:00:00:00</span>
     </div>
-
-    <div class="dynamic-gallery">
-      <div class="gallery-item span-6 reveal-stagger">
-          <img src="steamworks122.png" alt="Yunis' Arrival">
-          <div class="gallery-annotation">
-              <h4>Yunis' Arrival</h4>
-              <p>After a year, Yunis finally returns to his home of Cinceria.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-6 reveal-stagger">
-          <img src="steamworks222.png" alt="Eternia Time">
-          <div class="gallery-annotation">
-              <h4>Memories of the past.</h4>
-              <p>Reflect on the past, seal your future.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="story2.png" alt="Gravesite">
-          <div class="gallery-annotation">
-              <h4>Untimely foes.</h4>
-              <p>Yunis deals with unsavoury characters.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="story3.png" alt="Lore Scene 1">
-          <div class="gallery-annotation">
-              <h4>Best Friends</h4>
-              <p>Rictor and Yunis reunite as they talk about his time away.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="story4.png" alt="Lore Scene 2">
-          <div class="gallery-annotation">
-              <h4>Back Together.</h4>
-              <p>As it should be...</p>
-          </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="gameplay">
-    <h2 class="reveal-slide-left" style="text-align: right;">Gameplay & Content</h2>
-    <div class="features-grid">
-        <div class="feature-tag reveal-stagger">13 Unique Playable Characters</div>
-        <div class="feature-tag reveal-stagger">Exclusive STANCE Combat System</div>
-        <div class="feature-tag reveal-stagger">Explore 9 Unique Regions</div>
-        <div class="feature-tag reveal-stagger">Fully Voiced Cutscenes & Encounters</div>
-        <div class="feature-tag reveal-stagger">200+ Track OST by Oxiqa</div>
-        <div class="feature-tag reveal-stagger">100+ Achievements</div>
-    </div>
-    <div class="content-box reveal-slide-left" style="margin-left: auto; border-left: none; border-right: 5px solid var(--within-purple);">
-        <p>Utilising a fully unique turn-based combat system, Within Time throws you into the world of Iolade as you fight, talk and plan your way through each advesary that dare cross your path. Picking up to four active characters to fight as in combat you'll utilise the STANCE system to navigate tough encounters and achieve victory in the toughest spots.</p>
-        <p style="margin-top: 1rem;">With each of the thirteen playable characters having their own element to utilise, the possibilities for combat are near endless. Experience a wholy unique take on the turn-based RPG genre in Within Time.</p>
-    </div>
-
-    <div class="dynamic-gallery">
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="combat1.png" alt="Overworld Exploration">
-          <div class="gallery-annotation">
-              <h4>Turn Based Combat</h4>
-              <p>Delicately crafted and unique spin on TBRPGs.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="combat2.png" alt="Combat Scene">
-          <div class="gallery-annotation">
-              <h4>The Party</h4>
-              <p>Sleek designed menus.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-4 reveal-stagger">
-          <img src="story5.png" alt="Character Menu">
-          <div class="gallery-annotation">
-              <h4>Vast exploration</h4>
-              <p>Explore many locations throughout the worlds of Cinceria and Iolade.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-6 reveal-stagger">
-          <img src="firsteterniatime.png" alt="alt placehodler text">
-          <div class="gallery-annotation">
-              <h4>Unforseen Worlds</h4>
-              <p>Engage in travel across worlds.</p>
-          </div>
-      </div>
-      <div class="gallery-item span-6 reveal-stagger">
-          <img src="combat3.png" alt="Elemental Synergy">
-          <div class="gallery-annotation">
-              <h4>Deep Customisation</h4>
-              <p>Pick and choose skills you bring into battle.</p>
-          </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="characters">
-    <div id="characters-section">
-        <div class="char-visual reveal-slide-right">
-            <img id="charSilhouette" src="yunisnobg.png" />
+    <div class="hero-content">
+      <div>
+        <p class="hero-sub" data-hero>A turn-based RPG &middot; <b style="color: var(--crimson-hi); font-weight: 400;">ACT 1 arrives December 2026</b></p>
+        <p class="display hero-tag" data-hero><span class="fill-within">Fate changes</span><br><span class="fill-time">for no one.</span></p>
+        <div class="hero-ctas" data-hero>
+          <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="btn btn--primary" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg>
+            Wishlist on Steam
+          </a>
+          <a href="#trailer" class="btn btn--ghost" id="heroTrailer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>
+            Watch trailer
+          </a>
         </div>
-        <div class="char-content reveal-slide-left">
-            <h2 id="charName" style="margin-bottom: 0.5rem;">Yunis Caelum</h2>
-            <h3 id="charRole" style="color: var(--within-purple); margin-bottom: 2rem; font-size: 1.1rem;">The Light of Humanity - VA: AnimilkyVA</h3>
-            <div class="content-box" style="padding: 2rem; border-right: 5px solid var(--within-purple); border-left: none;">
-                <p id="charDesc">YUNIS is the leader of the Scions of Fate, he is a stellar leader due to his chill, yet cautious attitude. he always seems to have good control over everything he does.. however, isn’t that way all the time.</p>
-            </div>
-            <div class="char-controls" style="margin-top: 3rem; display: flex; gap: 20px;">
-                <button id="charPrev">← PREV</button>
-                <button id="charNext">NEXT →</button>
-            </div>
-        </div>
+      </div>
+      <div class="scroll-cue" data-hero aria-hidden="true">Scroll<i></i></div>
     </div>
   </section>
 
-  <section id="socials" style="align-items: center; text-align: center;">
-      <h2 class="reveal-scale">Join the Network</h2>
-      <p class="reveal-slide-up" style="color: rgba(255,255,255,0.7); max-width: 500px; margin-bottom: 1rem;">
-          Connect with us to stay updated on the game's progress.
-      </p>
-      
-      <div class="social-links">
-          <a href="https://www.youtube.com/@withintimegame" target="_blank" class="social-btn">
-              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-              YouTube
-          </a>
-          <a href="https://discord.com/invite/BP3jBjgWn5" target="_blank" class="social-btn">
-              <svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
-              Discord
-          </a>
-          <a href="https://x.com/withintimegame" target="_blank" class="social-btn">
-              <svg viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
-              Twitter / X
-          </a>
-          <a href="https://www.tiktok.com/@withintimegame" target="_blank" class="social-btn">
-              <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.96-.5 3.96-1.82 5.36-1.5 1.49-3.7 2.13-5.75 1.74-2.26-.42-4.14-2.16-4.83-4.36-.8-2.58.12-5.54 2.37-7.07 2.08-1.42 4.95-1.4 7.02-.15v4.21c-1.32-.97-3.21-1.05-4.57-.15-.98.66-1.52 1.83-1.42 3.01.12 1.34 1.15 2.5 2.47 2.76 1.48.28 3.12-.22 4.02-1.45.65-.87.97-1.97.97-3.04V.02z"/></svg>
-              TikTok
-          </a>
-          <a href="https://www.instagram.com/withintimegame/" target="_blank" class="social-btn">
-              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-              Instagram
-          </a>
+  <!-- ===================== TICKER ===================== -->
+  <div class="ticker" aria-hidden="true">
+    <div class="band band--a"><div class="band-track" id="tickerA"></div></div>
+    <div class="band band--b"><div class="band-track" id="tickerB"></div></div>
+  </div>
+
+  <!-- ===================== TRAILER ===================== -->
+  <section id="trailer" data-tint="#6a3fc0">
+    <div class="wrap">
+      <header class="sec-head center">
+        <span class="eyebrow"><b>01</b> Vision fragment</span><br>
+        <h2 class="echo"><span class="fill-within">Official Trailer</span></h2>
+      </header>
+      <div class="player-wrap rv">
+        <button class="player" id="player" type="button" aria-label="Play the official Within Time trailer">
+          <img src="assets/keyart/promo-cast.webp" alt="" loading="lazy" />
+          <span class="play">
+            <span class="play-disc">
+              <svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="0.8" stroke-dasharray="2 5" /></svg>
+              <span class="core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3l16 9-16 9z"/></svg></span>
+            </span>
+            <span>Play trailer</span>
+          </span>
+        </button>
       </div>
+      <div class="player-meta">
+        <span>Within Time &middot; Official trailer</span>
+        <a href="https://www.youtube.com/@withintimegame" target="_blank" rel="noopener">More on YouTube &#8599;</a>
+      </div>
+    </div>
   </section>
 
-  <section id="contract">
-      <div class="contract-document reveal-scale">
-          <h2 style="font-size: 2.5rem; color: #fff;">The Pact is Sealed</h2>
-          <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.8;">
-              By the marks above, your time shall come to a close when fate deems it. You are but a victim to this unforgiving cycle. FATE CHANGES FOR NO ONE.
-          </p>
-          <div class="final-signature-container">
-              <img id="final-signature-image" src="" alt="Your Sealed Fate" />
+  <!-- ===================== STORY ===================== -->
+  <section id="story" data-tint="#9b3fd0">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="eyebrow"><b>02</b> The prophecy</span><br>
+        <h2 class="echo fx-time"><span class="fill-time">Six months remain</span></h2>
+      </header>
+
+      <div class="story-grid">
+        <div class="rv-x">
+          <div class="countdown">
+            <span class="cd-num fill-within" id="cdNum">06</span>
+            <span class="cd-unit">Months<br>until<br>the seal</span>
           </div>
+          <p class="story-copy">Yunis Caelum comes home to a town still haunted by the girl it lost. What he finds there pulls him, and everyone he loves, into a world that should not exist.</p>
+        </div>
+
+        <div class="dialogue vn rv" id="vn" role="button" tabindex="0" aria-label="Story dialogue. Press to continue.">
+          <span class="dialogue-name" id="vnName">???</span>
+          <p class="vn-text" id="vnText" aria-live="polite"></p>
+          <div class="vn-foot">
+            <div class="vn-dots" id="vnDots"></div>
+            <span class="vn-next" id="vnNext">Next</span>
+          </div>
+          <div class="vn-pages">
+            <p data-name="???">Six months remain before the fate of two worlds is sealed, and humanity as it is known ceases to exist.</p>
+            <p data-name="Narrator"><em>Yunis Caelum</em> leads the charge, followed closely by his childhood friends <em>Estella Kisiel</em>, <em>Angie Alfaro</em> and <em>Rictor Fitzsimmons</em>.</p>
+            <p data-name="Narrator">Together they venture into <b>Iolade</b>, a world bound to their own <b>Terrus</b> by a force none of them understand.</p>
+            <p data-name="Narrator">They came looking for answers to June Clavis' disappearance. What they find is a prophecy, their place in it, and the terror of the <b>Scion of Time</b>.</p>
+            <p data-name="???" data-final>Fate changes for no one.</p>
+          </div>
+        </div>
       </div>
+
+      <div class="beats">
+        <article class="beat">
+          <div class="beat-text rv-x">
+            <span class="beat-when"><b>01</b> Three years ago</span>
+            <h3 class="echo">She vanished</h3>
+            <p>On February 5th, <strong>June Clavis</strong> disappeared from the quiet town of Cinceria. No answers, no trace, no goodbye. A year later she was declared dead, and Yunis left town rather than face it.</p>
+          </div>
+          <div class="beat-shot rv"><figure class="slot" data-img="assets/screens/05-june-memory.png" data-label="Yunis remembers June"></figure></div>
+        </article>
+
+        <article class="beat">
+          <div class="beat-text rv-x">
+            <span class="beat-when"><b>02</b> Today</span>
+            <h3 class="echo">Coming home</h3>
+            <p>Yunis returns to find Cinceria hollowed out. Half the town has left, the rest whisper that it is cursed, and a gang has made the streets their own. Waiting for him are the friends he left behind: <strong>Estella</strong>, <strong>Angie</strong> and <strong>Rictor</strong>.</p>
+          </div>
+          <div class="beat-shot rv"><figure class="slot" data-img="assets/screens/07-yunis-home.png" data-label="Yunis back home in Cinceria"></figure></div>
+        </article>
+
+        <article class="beat">
+          <div class="beat-text rv-x">
+            <span class="beat-when"><b>03</b> That night</span>
+            <h3 class="echo">One last goodbye</h3>
+            <p>Together again, the four make their way into the forest, to the memorial they built for June. They are ready to finally lay their grief to rest. Yunis asks her for just one thing: a sign.</p>
+          </div>
+          <div class="beat-shot rv"><figure class="slot" data-img="assets/screens/03-market-dialogue.webp" data-label="The road to June's memorial"></figure></div>
+        </article>
+
+        <article class="beat beat--hook rv" data-bg="assets/screens/11-fracture.webp">
+          <div class="beat-text">
+            <span class="beat-when"><b>04</b> Then</span>
+            <h3 class="echo fx-time"><span class="fill-time">Something answers.</span></h3>
+            <p>They wake somewhere that is not Cinceria. A world called <strong>Iolade</strong>, a prophecy they were never meant to read, and six months before fate is sealed for good.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="cast-strip" id="castStrip">
+        <img src="assets/keyart/cast-banner.webp" alt="Rictor, Angie, Estella and Yunis in profile, trailed by afterimages of themselves" loading="lazy" />
+      </div>
+    </div>
   </section>
 
-  <section id="steam" style="text-align: center; align-items: center;">
-    <h2 class="reveal-slide-up">RECLAIM YOUR FUTURE</h2>
-    <div class="reveal-slide-up">
-        <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="steam-cta">WISHLIST ON STEAM</a>
-    </div>
-    <div style="margin-top: 100px; font-size: 0.8rem; color: rgba(255,255,255,0.3); letter-spacing: 2px;">
-        &copy; 2026 TEAM INNERMINDS, LUNAVIA | ALL RIGHTS RESERVED
+  <!-- ===================== WORLDS ===================== -->
+  <section id="worlds" data-tint="#9a2a6a">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="eyebrow"><b>03</b> The branch point</span><br>
+        <h2 class="echo"><span class="fill-within">Two worlds,</span><br><span class="fill-time">one fate</span></h2>
+        <p class="lede">Terrus is home. Iolade is something else entirely. The deeper the story goes, the harder it becomes to tell where one ends and the other begins.</p>
+      </header>
+
+      <div class="rift rv" id="rift">
+        <div class="rift-layer rift-terrus" data-bg="assets/screens/02-her-grave.webp"></div>
+        <div class="rift-layer rift-iolade" data-bg="assets/screens/09-iolade-woods.png"></div>
+        <div class="rift-seam" aria-hidden="true"><span class="rift-moon"></span></div>
+        <div class="rift-info rift-info--terrus">
+          <span class="realm-label">World 01 &middot; Home</span>
+          <h3>Terrus</h3>
+          <p>Cinceria, Yunis' quiet hometown: familiar streets, old friends, and a grief he never got to put down.</p>
+        </div>
+        <div class="rift-info rift-info--iolade">
+          <span class="realm-label">World 02 &middot; Beyond</span>
+          <h3>Iolade</h3>
+          <p>A world bound to Terrus by a force no one understands, older and stranger with every step.</p>
+        </div>
+        <span class="rift-hint" aria-hidden="true">&#9664; Move to cross over &#9654;</span>
+        <input class="rift-range" id="riftRange" type="range" min="0" max="100" value="50" aria-label="Blend the view between Terrus and Iolade" />
+        <div class="rift-focus" aria-hidden="true"></div>
+      </div>
+
+      <div class="explore">
+        <div class="scene rv" >
+          <figure class="slot" data-img="assets/screens/08-dungeon.png" data-label="Ruins beneath the surface"></figure>
+        </div>
+        <div class="scene rv" data-delay="0.1">
+          <figure class="slot" data-img="assets/screens/10-iolade-rain.png" data-label="Iolade in the rain"></figure>
+        </div>
+      </div>
+      <div class="world-foot"><span><b>9</b> unique regions to explore</span><span>Quests and secrets along the way</span></div>
     </div>
   </section>
 
+  <!-- ===================== COMBAT ===================== -->
+  <section id="combat" data-tint="#7b4bd1">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="eyebrow"><b>04</b> Combat</span><br>
+        <h2 class="echo"><span class="fill-within">The STANCE system</span></h2>
+      </header>
+
+      <div class="combat">
+        <div class="combat-copy rv-x">
+          <p>Within Time's battles run on <strong>STANCE</strong>, a fully original take on turn-based combat. Up to four party members fight at once, and the turn order is always in view, so every encounter comes down to reading what happens next and planning around it.</p>
+          <p>Wear an enemy down until they break and get knocked out of the order entirely. Hunt for weak points, team up for combo attacks, and when the moment is right, commit your whole party to STANCE and hit harder together.</p>
+          <p>Every party member fights in their own way, so the team you bring changes how each battle plays out.</p>
+        </div>
+        <div class="combat-shots">
+          <figure class="slot rv" data-img="assets/screens/12-combat-wolves.webp" data-label="Turn-based combat"></figure>
+          <figure class="slot rv" data-delay="0.15" data-img="assets/screens/13-combat-turn-order.webp" data-label="Turn-based combat"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CAST ===================== -->
+  <section id="cast" data-tint="#b5312f">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="eyebrow"><b>05</b> Party select</span><br>
+        <h2 class="echo"><span class="fill-within">The Scions of Fate</span></h2>
+      </header>
+
+      <div class="cast">
+        <div class="cast-stage rv">
+          <div class="cast-glow"></div>
+          <div class="cast-ring"></div>
+          <div class="cast-bgname" id="castBgName" aria-hidden="true">Yunis</div>
+          <div class="cast-figure" id="castFigure">
+            <img class="ghost" alt="" aria-hidden="true" />
+            <img class="ghost" alt="" aria-hidden="true" />
+            <img class="ghost" alt="" aria-hidden="true" />
+            <img class="main" id="castImg" alt="" />
+          </div>
+          <div class="cast-floor"></div>
+        </div>
+
+        <div class="cast-info rv" id="castInfo">
+          <div class="cast-index"><b id="castNum">01</b> / 04 &middot; Party member</div>
+          <h3 class="cast-name"><span class="first" id="castFirst"></span><span class="last" id="castLast"></span></h3>
+          <div class="cast-title"><span id="castRole"></span><span id="castVA"></span></div>
+          <div class="dialogue">
+            <span class="dialogue-name" id="castTag"></span>
+            <p id="castDesc"></p>
+          </div>
+          <div class="party" id="party" role="tablist" aria-label="Choose a character"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== RELEASE ===================== -->
+  <section id="acts" data-tint="#b8243a">
+    <div class="wrap">
+      <header class="sec-head">
+        <span class="eyebrow"><b>06</b> Release</span><br>
+        <h2 class="echo"><span class="fill-within">One story,</span><br><span class="fill-time">told in acts</span></h2>
+      </header>
+
+      <div class="release">
+        <div class="act-card rv-x">
+          <span class="eyebrow"><b>&#9670;</b> Next release</span>
+          <div class="act-big"><span class="fill-time">ACT 1</span></div>
+          <div class="act-date">December 2026</div>
+          <div class="act-status">Final stretch of development</div><br>
+          <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="btn btn--primary" target="_blank" rel="noopener">Wishlist on Steam</a>
+        </div>
+        <div class="release-copy rv">
+          <p>Within Time is being released in <strong>Acts</strong>. The full journey spans a <strong>Prologue and twelve Acts</strong>, each one picking up where the last left off.</p>
+          <p>The Prologue is complete, and <strong>ACT 1</strong> is nearing the end of development, arriving <strong>December 2026</strong>. Wishlist now so you know the moment it lands.</p>
+        </div>
+      </div>
+
+      <div class="acts-track rv">
+        <div class="acts" role="list" aria-label="Release roadmap">
+          <div class="act done" role="listitem"><span class="act-moon"></span><b>Prologue</b><small>Complete</small></div>
+          <div class="act next" role="listitem"><span class="act-moon"></span><b>Act 1</b><small>Dec 2026</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 2</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 3</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 4</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 5</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 6</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 7</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 8</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 9</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 10</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 11</b><small>Upcoming</small></div>
+            <div class="act" role="listitem"><span class="act-moon"></span><b>Act 12</b><small>Upcoming</small></div>
+        </div>
+      </div>
+
+      <div class="stats rv">
+        <div class="stat"><div class="n fill-within" data-count="13">13</div><div class="l">Playable characters</div></div>
+        <div class="stat"><div class="n fill-within" data-count="9">9</div><div class="l">Unique regions</div></div>
+        <div class="stat"><div class="n fill-time" data-count="200" data-suffix="+">200+</div><div class="l">Track OST by Oxiqa</div></div>
+        <div class="stat"><div class="n fill-time" data-count="100" data-suffix="+">100+</div><div class="l">Achievements</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINALE ===================== -->
+  <section id="finale" data-tint="#e8283c">
+    <div class="finale-bg" data-bg="assets/screens/01-title-menu.png" aria-hidden="true"></div>
+    <span class="eyebrow rv"><b>&#9670;</b> End of line</span>
+    <h2 class="display finale-title">
+      <span class="echo"><span class="fill-within">Fate changes</span></span>
+      <span class="echo fx-time"><span class="fill-time">for no one.</span></span>
+    </h2>
+    <p class="finale-sub rv">ACT 1 arrives December 2026. Wishlist Within Time on Steam to hear the moment the seal breaks.</p>
+    <div class="rv">
+      <a href="https://store.steampowered.com/app/2302230/Within_Time/" class="btn btn--primary btn--lg" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 21l1.6-7L2 9.2l7.1-.6z"/></svg>
+        Wishlist on Steam
+      </a>
+    </div>
+    <div class="socials rv">
+      <a class="social" href="https://discord.com/invite/BP3jBjgWn5" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.1 14.1 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>Discord</a>
+      <a class="social" href="https://www.youtube.com/@withintimegame" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</a>
+      <a class="social" href="https://x.com/withintimegame" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>X</a>
+      <a class="social" href="https://www.tiktok.com/@withintimegame" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.96-.5 3.96-1.82 5.36-1.5 1.49-3.7 2.13-5.75 1.74-2.26-.42-4.14-2.16-4.83-4.36-.8-2.58.12-5.54 2.37-7.07 2.08-1.42 4.95-1.4 7.02-.15v4.21c-1.32-.97-3.21-1.05-4.57-.15-.98.66-1.52 1.83-1.42 3.01.12 1.34 1.15 2.5 2.47 2.76 1.48.28 3.12-.22 4.02-1.45.65-.87.97-1.97.97-3.04V.02z"/></svg>TikTok</a>
+      <a class="social" href="https://www.instagram.com/withintimegame/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Instagram</a>
+    </div>
+  </section>
+  </main>
+
+  <footer class="footer">
+    <div class="innerminds"><span class="innerminds-mark" aria-hidden="true"></span><span><small>Team</small><b>Innerminds</b></span></div>
+    <div class="footer-links">
+      <a href="devlog.html">Devlog</a>
+      <a href="https://store.steampowered.com/app/2302230/Within_Time/" target="_blank" rel="noopener">Steam</a>
+      <a href="https://discord.com/invite/BP3jBjgWn5" target="_blank" rel="noopener">Discord</a>
+    </div>
+    <span>&copy; 2026 Team Innerminds, Lunavia</span>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+    const WT = WithinTime;
 
-    // --- CANVAS DRAWING LOGIC ---
-    const canvas = document.getElementById('signature-pad');
-    const ctx = canvas.getContext('2d');
-    let isDrawing = false;
-    let hasDrawn = false;
+    WT.initEcho();
+    WT.initSlots();
+    WT.initBackdrops();
+    WT.initDust();
+    WT.initMoon();
+    WT.initDaysCounter(180);
+    WT.initNav(['trailer', 'story', 'worlds', 'combat', 'cast', 'acts']);
+    WT.initTints();
+    WT.initCounters();
+    WT.initAmbientAudio('Track 1 - Re;Start.mp3');
 
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 3;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    function getCoordinates(e) {
-        const rect = canvas.getBoundingClientRect();
-        
-        // Calculate the scale to fix drawing offset on mobile screens
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-
-        if(e.touches && e.touches.length > 0) {
-            return { 
-                x: (e.touches[0].clientX - rect.left) * scaleX, 
-                y: (e.touches[0].clientY - rect.top) * scaleY 
-            };
-        }
-        return { 
-            x: (e.clientX - rect.left) * scaleX, 
-            y: (e.clientY - rect.top) * scaleY 
-        };
-    }
-
-    function startDrawing(e) {
-        isDrawing = true;
-        hasDrawn = true;
-        const coords = getCoordinates(e);
-        ctx.beginPath();
-        ctx.moveTo(coords.x, coords.y);
-        e.preventDefault(); 
-    }
-
-    function draw(e) {
-        if (!isDrawing) return;
-        const coords = getCoordinates(e);
-        ctx.lineTo(coords.x, coords.y);
-        ctx.stroke();
-        e.preventDefault();
-    }
-
-    function stopDrawing() {
-        if (isDrawing) {
-            ctx.closePath();
-            isDrawing = false;
-        }
-    }
-
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
-    canvas.addEventListener('touchstart', startDrawing, {passive: false});
-    canvas.addEventListener('touchmove', draw, {passive: false});
-    canvas.addEventListener('touchend', stopDrawing);
-
-    document.getElementById('clear-btn').addEventListener('click', () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        hasDrawn = false;
+    // ---------- Hero intro: key art arrives trailing its own afterimages ----------
+    gsap.set('[data-hero]', { opacity: 0, y: 24 });
+    gsap.set('.hero-frame', { clipPath: 'inset(0 100% 100% 0)' });
+    WT.initLoader(() => {
+      const tl = gsap.timeline();
+      tl.fromTo('#heroImg', { scale: 1.14, filter: 'brightness(2.2) saturate(0.4)' }, { scale: 1, filter: 'brightness(1) saturate(1)', duration: 2.2, ease: 'expo.out' })
+        .fromTo('.hero-art .ghost', { opacity: 0.55, xPercent: -10, scale: 1.14 }, { opacity: 0, xPercent: 0, scale: 1, duration: 1.4, stagger: 0.12, ease: 'power3.out' }, 0)
+        .to('.hero-frame', { clipPath: 'inset(0 0% 0% 0)', duration: 1.4, ease: 'power3.inOut' }, 0.3)
+        .to('[data-hero]', { opacity: 1, y: 0, duration: 1, stagger: 0.12, ease: 'power3.out' }, 0.6)
+        .add(() => WT.initReveals(), 0.2);
     });
 
-    // --- INTRO SEQUENCE LOGIC ---
-    const tl = gsap.timeline();
-    tl.fromTo("#tagline-text", 
-        { x: "-100vw", opacity: 0 }, 
-        { x: "0", opacity: 1, duration: 1.5, ease: "expo.out" }
-    )
-    .to("#tagline-text", { x: "100vw", opacity: 0, duration: 1, ease: "expo.in", delay: 1.5 })
-    .fromTo("#signature-box", 
-        { y: 50, opacity: 0 }, 
-        { y: 0, opacity: 1, duration: 1, ease: "back.out(1.7)" }
-    );
+    // Scroll away: art drifts and dims like a scene fading out
+    if (!WT.reduceMotion) {
+      gsap.to('.hero-art', { yPercent: 14, ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to('.hero-content', { opacity: 0, y: -40, ease: 'none', scrollTrigger: { trigger: '#hero', start: '35% top', end: 'bottom top', scrub: true } });
+      gsap.fromTo('#castStrip img', { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: '#castStrip', start: 'top bottom', end: 'bottom top', scrub: true } });
+    }
 
-    // --- SEAL FATE SUBMISSION ---
-    document.getElementById('seal-btn').addEventListener('click', () => {
-        if(!hasDrawn) {
-            gsap.fromTo(canvas, {x: -10}, {x: 10, duration: 0.1, yoyo: true, repeat: 3, onComplete: () => gsap.set(canvas, {x:0})});
-            return; 
-        }
-        const signatureDataURL = canvas.toDataURL("image/png");
-        document.getElementById('final-signature-image').src = signatureDataURL;
-        gsap.to("#preloader", {
-            opacity: 0, 
-            duration: 1.5, 
-            ease: "power2.inOut",
-            onComplete: () => {
-                document.getElementById('preloader').style.display = 'none';
-                gsap.from("#hero-logo", { scale: 0.8, opacity: 0, duration: 2, ease: "elastic.out(1, 0.3)" });
-            }
+    // Running timecode in the hero frame
+    (function () {
+      const el = document.getElementById('timecode');
+      const start = performance.now();
+      const pad = n => String(n).padStart(2, '0');
+      setInterval(() => {
+        const t = (performance.now() - start) / 1000;
+        el.textContent = `${pad(Math.floor(t / 3600))}:${pad(Math.floor(t / 60) % 60)}:${pad(Math.floor(t) % 60)}:${pad(Math.floor((t % 1) * 24))}`;
+      }, 1000 / 24);
+    })();
+
+    // ---------- Ticker bands ----------
+    (function () {
+      const a = ['Fate changes for no one', 'ACT 1 arrives December 2026', 'Turn-based RPG', 'STANCE combat', '13 playable characters', 'Fully voiced', 'Wishlist on Steam'];
+      const b = ['Terrus', 'Iolade', 'Prologue + 12 Acts', 'The Scion of Time', 'Six months remain', 'Team Innerminds'];
+      const build = (items, sep) => { const run = items.map(t => `<span>${t}</span><span class="sep">${sep}</span>`).join(''); return run + run + run + run; };
+      document.getElementById('tickerA').innerHTML = build(a, '&#10022;');
+      document.getElementById('tickerB').innerHTML = build(b, '&#9790;');
+    })();
+
+    // ---------- Trailer: lightweight facade until clicked ----------
+    document.getElementById('player').addEventListener('click', function () {
+      this.outerHTML = '<div class="player"><iframe src="https://www.youtube-nocookie.com/embed/pXOFb7ZVzNg?autoplay=1&rel=0" title="Within Time official trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>';
+    }, { once: true });
+    document.getElementById('heroTrailer').addEventListener('click', e => { e.preventDefault(); WT.scrollToSection('trailer'); });
+
+    // ---------- Story: in-game dialogue box with typewriter pages ----------
+    (function () {
+      const box = document.getElementById('vn');
+      const textEl = document.getElementById('vnText');
+      const nameEl = document.getElementById('vnName');
+      const nextEl = document.getElementById('vnNext');
+      const dots = document.getElementById('vnDots');
+      const pages = [...box.querySelectorAll('.vn-pages p')];
+      dots.innerHTML = pages.map(() => '<i></i>').join('');
+      let page = -1, timer = null, typing = false;
+
+      function finishTyping() {
+        clearInterval(timer); typing = false;
+        textEl.innerHTML = pages[page].innerHTML;
+      }
+      function show(i) {
+        page = i;
+        const p = pages[i];
+        nameEl.textContent = p.dataset.name;
+        textEl.classList.toggle('final', p.hasAttribute('data-final'));
+        [...dots.children].forEach((d, k) => d.classList.toggle('on', k <= i));
+        nextEl.textContent = i === pages.length - 1 ? 'Replay' : 'Next';
+        const plain = p.textContent;
+        if (WT.reduceMotion) { textEl.innerHTML = p.innerHTML; return; }
+        let n = 0; typing = true; textEl.textContent = '';
+        clearInterval(timer);
+        timer = setInterval(() => {
+          n += 2; textEl.textContent = plain.slice(0, n);
+          if (n >= plain.length) finishTyping();
+        }, 22);
+      }
+      function advance() {
+        if (typing) { finishTyping(); return; }
+        show(page >= pages.length - 1 ? 0 : page + 1);
+      }
+      box.addEventListener('click', advance);
+      box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); advance(); } });
+      ScrollTrigger.create({ trigger: box, start: 'top 75%', once: true, onEnter: () => show(0) });
+    })();
+
+    // ---------- Cast: party select with afterimage swaps ----------
+    (function () {
+      const cast = [
+        { first: 'Yunis', last: 'Caelum', role: 'The Light of Humanity', va: 'VA: AnimilkyVA', img: 'yunisnobg.png', banner: 'assets/characters/yunis-banner.png', color: '#d0303a',
+          desc: 'The leader of the Scions of Fate. His chill yet cautious attitude makes him a stellar leader, and he always seems to have everything under control. He doesn’t, not all the time.' },
+        { first: 'Estella', last: 'Kisiel', role: 'The Visionary', va: 'VA: Emilie Brewer', img: 'Stellanobg.png', banner: 'assets/characters/estella-banner.png', color: '#4a6ff0',
+          desc: 'The brains of the Scions of Fate, with an intellect far beyond the rest of her friends. She has been close to Yunis since primary school, a bond that has only deepened into their teenage years.' },
+        { first: 'Angie', last: 'Alfaro', role: 'The Ember Soul', va: 'VA: Alaina Clark', img: 'angienobg.png', banner: 'assets/characters/angie-banner.png', color: '#f0c419',
+          desc: 'The most well rounded of the Scions of Fate, with sharp intellect and physical feats to match. A master of guns, and just as relentlessly positive and optimistic as Rictor.' },
+        { first: 'Rictor', last: 'Fitzsimmons', role: 'The Iron Heart of Cinceria', va: 'VA: Cameron Judd', img: 'rictornobg.png', banner: 'assets/characters/rictor-banner.png', color: '#ea7a26',
+          desc: 'The muscle of the Scions of Fate, known for overwhelming strength. A former gang member and boxer, yet always compassionate and ready to crack a joke.' }
+      ];
+      const section = document.getElementById('cast');
+      const party = document.getElementById('party');
+      const mainImg = document.getElementById('castImg');
+      const ghosts = [...document.querySelectorAll('#castFigure .ghost')];
+      const $ = id => document.getElementById(id);
+
+      cast.forEach((c, i) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.setAttribute('role', 'tab');
+        b.setAttribute('aria-label', `${c.first} ${c.last}`);
+        b.style.backgroundImage = `url('${c.banner}')`;
+        b.addEventListener('click', () => select(i));
+        party.appendChild(b);
+        new Image().src = c.img;
+      });
+      const buttons = [...party.children];
+      let current = -1;
+
+      function select(i) {
+        if (i === current) return;
+        const dir = i > current ? 1 : -1;
+        current = i;
+        const c = cast[i];
+        section.style.setProperty('--accent', c.color);
+        section.dataset.tint = c.color;
+        const r = section.getBoundingClientRect();
+        if (r.top < innerHeight * 0.55 && r.bottom > innerHeight * 0.55) gsap.to(document.documentElement, { '--tint': c.color, duration: 1 });
+        buttons.forEach((b, k) => { b.classList.toggle('active', k === i); b.setAttribute('aria-selected', k === i); });
+
+        mainImg.src = c.img; mainImg.alt = `${c.first} ${c.last}, full body art`;
+        ghosts.forEach(g => { g.src = c.img; });
+        $('castBgName').textContent = c.first;
+        $('castNum').textContent = String(i + 1).padStart(2, '0');
+        $('castFirst').textContent = c.first;
+        $('castLast').textContent = c.last;
+        $('castRole').textContent = c.role;
+        $('castVA').textContent = c.va;
+        $('castTag').textContent = c.first;
+        $('castDesc').textContent = c.desc;
+
+        if (WT.reduceMotion) return;
+        gsap.fromTo(mainImg, { xPercent: -50 + 18 * dir, opacity: 0 }, { xPercent: -50, opacity: 1, duration: 0.9, ease: 'expo.out' });
+        ghosts.forEach((g, k) => {
+          const rest = -50 - (k + 1) * 11;
+          gsap.fromTo(g, { xPercent: -50 + 18 * dir, opacity: 0.5 }, { xPercent: rest, opacity: [0.42, 0.24, 0.11][k], duration: 1.1 + k * 0.15, ease: 'expo.out' });
         });
-    });
+        gsap.fromTo('#castInfo .cast-name, #castInfo .cast-title, #castInfo .dialogue', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out' });
+        gsap.fromTo('#castBgName', { opacity: 0, xPercent: -50 - 6 * dir }, { opacity: 1, xPercent: -50, duration: 1, ease: 'expo.out' });
+      }
+      // Ghost copies rest behind the main art as afterimages trailing left
+      gsap.set('#castFigure img, #castBgName', { xPercent: -50 });
+      ghosts.forEach((g, k) => gsap.set(g, { xPercent: -50 - (k + 1) * 11, opacity: [0.42, 0.24, 0.11][k] }));
+      select(0);
+    })();
 
-    // --- SCROLL ANIMATIONS ---
-    function scrollToSection(id) {
-        gsap.to(window, { duration: 1.2, scrollTo: "#" + id, ease: "power4.inOut" });
-    }
+    // ---------- Worlds: drag the rift between Terrus and Iolade ----------
+    (function () {
+      const rift = document.getElementById('rift');
+      const range = document.getElementById('riftRange');
+      const state = { x: 50 };
+      const apply = () => {
+        rift.style.setProperty('--x', state.x + '%');
+        rift.style.setProperty('--t', (state.x / 100).toFixed(3));
+        range.value = Math.round(state.x);
+      };
+      // Until someone touches it, the rift drifts on its own
+      const drift = WT.reduceMotion ? null : gsap.fromTo(state, { x: 38 }, { x: 62, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1, onUpdate: apply });
+      function take(x) {
+        if (drift) drift.kill();
+        rift.classList.add('touched');
+        gsap.to(state, { x: Math.max(4, Math.min(96, x)), duration: 0.35, ease: 'power3.out', onUpdate: apply, overwrite: true });
+      }
+      rift.addEventListener('pointermove', e => {
+        if (e.pointerType !== 'mouse') return;
+        const r = rift.getBoundingClientRect();
+        take((e.clientX - r.left) / r.width * 100);
+      });
+      range.addEventListener('input', () => take(parseFloat(range.value)));
+      apply();
+    })();
 
-    const sections = ['hero', 'trailer', 'story', 'gameplay', 'characters', 'socials', 'contract'];
-    sections.forEach((section, index) => {
-        ScrollTrigger.create({
-            trigger: "#" + section, start: "top center", end: "bottom center",
-            onEnter: () => updateNav(index), onEnterBack: () => updateNav(index)
-        });
-    });
+    // ---------- Finale: the moon turns to blood ----------
+    ScrollTrigger.create({ trigger: '#finale', start: 'top 60%', onEnter: () => WT.setBloodMoon(true), onLeaveBack: () => WT.setBloodMoon(false) });
 
-    function updateNav(index) {
-        document.querySelectorAll('.nav-dot').forEach(dot => dot.classList.remove('active'));
-        if(document.querySelectorAll('.nav-dot')[index]) {
-            document.querySelectorAll('.nav-dot')[index].classList.add('active');
-        }
-    }
+    ScrollTrigger.refresh();
+    window.addEventListener('load', () => ScrollTrigger.refresh());
 
-    gsap.utils.toArray('.reveal-slide-right').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, x: -100, opacity: 0, duration: 1.2, ease: "power3.out" }); });
-    gsap.utils.toArray('.reveal-slide-left').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, x: 100, opacity: 0, duration: 1.2, ease: "power3.out" }); });
-    gsap.utils.toArray('.reveal-slide-up').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, y: 50, opacity: 0, duration: 1, ease: "power3.out" }); });
-    gsap.utils.toArray('.reveal-scale').forEach(el => { gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, scale: 0.9, opacity: 0, duration: 1, ease: "back.out(1.5)" }); });
-
-    const grids = document.querySelectorAll('.dynamic-gallery, .features-grid');
-    grids.forEach(grid => {
-        const items = grid.querySelectorAll('.reveal-stagger');
-        gsap.from(items, {
-            scrollTrigger: { 
-                trigger: grid, 
-                start: "top 95%",
-                toggleActions: "play none none none"
-            },
-            y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power3.out"
-        });
-    });
-
-    // --- CHARACTER LOGIC ---
-    const characters = [
-      { name: 'Yunis Caelum', role: 'The Light of Humanity - VA: AnimilkyVA', img: 'yunisnobg.png', desc: 'YUNIS is the leader of the Scions of Fate, he is a stellar leader due to his chill, yet cautious attitude. he always seems to have good control over everything he does.. however, isn’t that way all the time.' },
-      { name: 'Estella Kisiel', role: 'The Visionary - VA: Miss Emilie', img: 'Stellanobg.png', desc: 'ESTELLA is the brains of the Scions of Fate. Her intellect is far above the rest of her friends, She has been close friends with ---- and YUNIS since primary school having had a deep connection with the two progressing all the way into their teenage years.' },
-      { name: 'Angie Alfaro', role: 'The Ember Soul - VA: Alaina Clark', img: 'angienobg.png', desc: 'ANGIE is the most well rounded member of the Scions of Fate, having great intellect and physical feats, ANGIE is a master of guns. Her personality is very similar to RICTOR being very positive and optimistic.' },
-      { name: 'Rictor Fitzsimmons', role: 'The Iron Heart of Cinceria - VA: Cameron Judd', img: 'rictornobg.png', desc: 'RICTOR is the muscle of the Scions of Fate, having been noted to have overwhelming strength, he used to be a gang member, as well as a boxer. Despite this he’s always compassionate and ready to crack a joke.' }
-    ];
-
-    let charIndex = 0;
-    function updateChar(index) {
-      const c = characters[index];
-      gsap.to('#charSilhouette, .char-content', { opacity: 0, x: -20, duration: 0.3, onComplete: () => {
-        document.getElementById('charName').innerText = c.name;
-        document.getElementById('charRole').innerText = c.role;
-        document.getElementById('charDesc').innerText = c.desc;
-        document.getElementById('charSilhouette').src = c.img;
-        gsap.to('#charSilhouette, .char-content', { opacity: 1, x: 0, duration: 0.5, ease: "back.out(1.2)" });
-      }});
-    }
-    document.getElementById('charNext').onclick = () => { charIndex = (charIndex + 1) % characters.length; updateChar(charIndex); };
-    document.getElementById('charPrev').onclick = () => { charIndex = (charIndex - 1 + characters.length) % characters.length; updateChar(charIndex); };
-
-    // --- STARFIELD ---
-    const bgCanvas = document.getElementById('starfield');
-    const bgCtx = bgCanvas.getContext('2d');
-    let stars = [];
-    function initStars() {
-      bgCanvas.width = window.innerWidth; bgCanvas.height = window.innerHeight;
-      stars = Array.from({length: 120}, () => ({ x: Math.random() * bgCanvas.width, y: Math.random() * bgCanvas.height, size: Math.random() * 1.5, speed: Math.random() * 0.4 }));
-    }
-    function animateStars() {
-      bgCtx.clearRect(0,0,bgCanvas.width, bgCanvas.height); bgCtx.fillStyle = "rgba(164,122,255,0.6)";
-      stars.forEach(s => { s.y -= s.speed; if(s.y < 0) s.y = bgCanvas.height; bgCtx.beginPath(); bgCtx.arc(s.x, s.y, s.size, 0, Math.PI*2); bgCtx.fill(); });
-      requestAnimationFrame(animateStars);
-    }
-    initStars(); animateStars();
-
-    // --- THE YUNIS CAELUM EASTER EGG ---
-    let logoClicks = 0;
-    document.getElementById('hero-logo').addEventListener('click', () => {
-        logoClicks++;
-        
-        if(logoClicks === 13) {
-            const farewellScreen = document.createElement('div');
-            farewellScreen.style.cssText = "position:fixed;inset:0;background:#000;z-index:999999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;";
-            
-            const text = document.createElement('h1');
-            text.innerText = "FAREWELL, YUNIS CAELUM.";
-            text.style.cssText = "color:#fff;font-family:'Unbounded';font-weight:900;letter-spacing:6px;text-align:center;text-shadow:0 0 20px rgba(164,122,255,0.5); font-size: clamp(1.5rem, 5vw, 4rem);";
-            
-            farewellScreen.appendChild(text);
-            document.body.appendChild(farewellScreen);
-            document.body.style.overflow = "hidden";
-
-            const wipeTl = gsap.timeline();
-            const allPageElements = document.querySelectorAll('section, nav, .bg-fragment, canvas:not(#signature-pad)');
-            
-            wipeTl.to(allPageElements, {
-                scale: 0.8,
-                opacity: 0,
-                filter: "blur(10px)",
-                duration: 2,
-                stagger: { amount: 1.5, from: "random" }, 
-                ease: "power4.in"
-            })
-            .to(farewellScreen, { 
-                opacity: 1, 
-                duration: 3, 
-                ease: "power2.inOut" 
-            });
-        }
-    });
-
+    // ---------- The Yunis Caelum easter egg: click the logo 13 times ----------
+    (function () {
+      let clicks = 0;
+      const sfx = new Audio('glitch.mp3');
+      document.getElementById('heroEgg').addEventListener('click', () => {
+        clicks++;
+        sfx.currentTime = 0; sfx.volume = 0.4; sfx.play().catch(() => {});
+        gsap.fromTo('#heroImg', { x: -6 }, { x: 0, duration: 0.25, ease: 'power2.out' });
+        if (clicks !== 13) return;
+        const screen = document.createElement('div');
+        screen.style.cssText = 'position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;opacity:0;';
+        screen.innerHTML = '<h1 class="echo in fx-time" data-text="Farewell, Yunis Caelum." style="font-size:clamp(1.6rem,5vw,4rem);text-align:center;padding:0 24px;"><span class="echo-main fill-time">Farewell, Yunis Caelum.</span></h1>';
+        document.body.appendChild(screen);
+        document.body.classList.add('locked');
+        gsap.timeline()
+          .to('main > *, .topbar, .footer', { scale: 0.85, opacity: 0, filter: 'blur(10px)', duration: 2, stagger: { amount: 1.2, from: 'random' }, ease: 'power4.in' })
+          .to(screen, { opacity: 1, duration: 3, ease: 'power2.inOut' });
+      });
+    })();
   </script>
 </body>
 </html>
