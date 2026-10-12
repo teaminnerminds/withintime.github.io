@@ -43,7 +43,7 @@ const DEVLOG_POSTS = [
     excerpt: "Why turn-based combat needed a STANCE system, and how it changes the way you read every encounter.",
     body: `
       <p>One of the earliest design goals for Within Time's combat was to avoid the "select attack, watch numbers go down" loop that a lot of turn-based RPGs fall into. STANCE was built to make positioning and timing matter turn to turn, not just damage math.</p>
-      <p>Each of the thirteen playable characters brings their own element into a fight, and STANCE is the layer that decides how those elements interact with whatever's standing across from you. Attack, Skill, and Guard aren't just menu options. Reading when to use each one is most of the challenge in harder encounters.</p>
+      <p>Each of the 10+ playable characters brings their own element into a fight, and STANCE is the layer that decides how those elements interact with whatever's standing across from you. Attack, Skill, and Guard aren't just menu options. Reading when to use each one is most of the challenge in harder encounters.</p>
       <p>More on the specific mechanics (and the numbers behind them) in a future post once the current combat balancing pass is further along.</p>
     `
   }
